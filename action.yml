@@ -1,0 +1,11 @@
+# action.yml
+name: 'Sauce Connect Proxy Action'
+description: 'A GitHub action to launch Sauce Connect Proxy'
+inputs:
+  sauce-connect-args:  # id of input
+    scproxy-port: 4445
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.sauce-connect-args }}
