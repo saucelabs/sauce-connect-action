@@ -1,0 +1,34 @@
+{
+  "name": "sauce-connect-action",
+  "version": "1.0.0",
+  "description": "A GitHub action to launch Sauce Connect Proxy",
+  "main": "index.js",
+  "scripts": {
+    "docker": "run-s docker:login docker:build docker:tag docker:push:*",
+    "docker:build": "docker build -t saucelabs/sauce-connect .",
+    "docker:login": "docker login -u \"$DOCKER_USERNAME\" -p \"$DOCKER_PASSWORD\"",
+    "docker:push:latest": "docker push saucelabs/sauce-connect:latest",
+    "docker:push:version": "docker push saucelabs/sauce-connect:$npm_package_version",
+    "docker:tag": "docker tag saucelabs/sauce-connect saucelabs/sauce-connect:$npm_package_version",
+    "test": "node ./test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saucelabs/sauce-connect-action.git"
+  },
+  "keywords": [
+    "sauce",
+    "connect",
+    "proxy",
+    "saucelabs"
+  ],
+  "author": "Christian Bromann <christian@saucelabs.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saucelabs/sauce-connect-action/issues"
+  },
+  "homepage": "https://github.com/saucelabs/sauce-connect-action#readme",
+  "devDependencies": {
+    "webdriverio": "^5.13.2"
+  }
+}
