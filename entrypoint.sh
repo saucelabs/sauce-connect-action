@@ -1,5 +1,8 @@
 #!/bin/bash
 
+logFile="/srv/sauce-connect.log"
+params="--logfile=$logFile --verbose"
+
 if test "${1}" ; then
     params+=" --user=${1}"
 fi
@@ -41,118 +44,112 @@ if test "${10}"; then
 fi
 
 if test "${11}"; then
-    params+=" --logfile=${11}"
+    params+=" --max-logsize=${11}"
 fi
 
 if test "${12}"; then
-    params+=" --max-logsize=${12}"
+    params+=" --max-missed-acks=${12}"
 fi
 
 if test "${13}"; then
-    params+=" --max-missed-acks=${13}"
+    params+=" --metrics-address=${13}"
 fi
 
 if test "${14}"; then
-    params+=" --metrics-address=${14}"
-fi
-
-if test "${15}"; then
     params+=" --no-autodetect"
 fi
 
-if test "${16}"; then
+if test "${15}"; then
     params+=" --no-proxy-caching"
 fi
 
-if test "${17}"; then
+if test "${16}"; then
     params+=" --no-remove-colliding-tunnels"
 fi
 
+if test "${17}"; then
+    params+=" --no-ssl-bump-domains=${17}"
+fi
+
 if test "${18}"; then
-    params+=" --no-ssl-bump-domains=${18}"
+    params+=" --pac=${18}"
 fi
 
 if test "${19}"; then
-    params+=" --pac=${19}"
+    params+=" --pidfile=${19}"
 fi
 
 if test "${20}"; then
-    params+=" --pidfile=${20}"
+    params+=" --proxy=${20}"
 fi
 
 if test "${21}"; then
-    params+=" --proxy=${21}"
-fi
-
-if test "${22}"; then
     params+=" --proxy-tunnel"
 fi
 
+if test "${22}"; then
+    params+=" --proxy-userpwd=${22}"
+fi
+
 if test "${23}"; then
-    params+=" --proxy-userpwd=${23}"
+    params+=" --readyfile=${23}"
 fi
 
 if test "${24}"; then
-    params+=" --readyfile=${24}"
+    params+=" --rest-url=${24}"
 fi
 
 if test "${25}"; then
-    params+=" --rest-url=${25}"
+    params+=" --scproxy-port=${25}"
 fi
 
 if test "${26}"; then
-    params+=" --scproxy-port=${26}"
+    params+=" --scproxy-read-limit=${26}"
 fi
 
 if test "${27}"; then
-    params+=" --scproxy-read-limit=${27}"
+    params+=" --scproxy-write-limit=${27}"
 fi
 
 if test "${28}"; then
-    params+=" --scproxy-write-limit=${28}"
+    params+=" --se-port=${28}"
 fi
 
 if test "${29}"; then
-    params+=" --se-port=${29}"
-fi
-
-if test "${30}"; then
     params+=" --shared-tunnel"
 fi
 
 if test "${30}"; then
-    params+=" --shared-tunnel"
+    params+=" --tunnel-cainfo=${30}"
 fi
 
 if test "${31}"; then
-    params+=" --tunnel-cainfo=${31}"
+    params+=" --tunnel-capath=${31}"
 fi
 
 if test "${32}"; then
-    params+=" --tunnel-capath=${32}"
+    params+=" --tunnel-cert=${32}"
 fi
 
 if test "${33}"; then
-    params+=" --tunnel-cert=${33}"
+    params+=" --tunnel-domains=${33}"
 fi
 
 if test "${34}"; then
-    params+=" --tunnel-domains=${34}"
-fi
-
-if test "${35}"; then
-    params+=" --tunnel-identifier=${35}"
-fi
-
-if test "${36}"; then
-    params+=" --verbose"
+    params+=" --tunnel-identifier=${34}"
 fi
 
 echo "sc $params"
 sc $params &
 sleep 0.5
-while ! grep "Sauce Connect is up, you may start your tests." ${11} ; do
-    if grep "Goodbye" ${11} ; then
+
+if ! -f $logFile; then
+    echo "Sauce Connect could not create a log file"
+    exit 1
+fi
+
+while ! grep "Sauce Connect is up, you may start your tests." $logFile ; do
+    if grep "Goodbye" $logFile ; then
         echo "Sauce Connect failed starting"
         exit 1
     fi
