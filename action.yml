@@ -2,10 +2,153 @@
 name: 'Sauce Connect Proxy Action'
 description: 'A GitHub action to launch Sauce Connect Proxy'
 inputs:
-  sauce-connect-args:  # id of input
-    scproxy-port: 4445
+    username:
+        description: Sauce Labs user name.
+        required: true
+    accesskey:
+        description: Sauce Labs API Key.
+        required: true
+    cainfo:
+        description: CA certificate bundle to use for verifying REST connections. (default "/usr/local/etc/openssl/cert.pem")
+        required: false
+    capath:
+        description: Directory of CA certs to use for verifying REST connections. (default "/etc/ssl/certs")
+        required: false
+    configFile:
+        description: Path to YAML config file. Please refer to https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Command+Line+Reference for a sample configuration file.
+        required: false
+    directDomains:
+        description: Comma-separated list of domains. Requests whose host matches one of these will be relayed directly through the internet, instead of through the tunnel.
+        required: false
+    dns:
+        description: "Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53"
+        required: false
+    doctor:
+        description: Perform checks to detect possible misconfiguration or problems.
+        required: false
+    fastFailRegexps:
+        description: Comma-separated list of regular expressions. Requests matching one of these will get dropped instantly and will not go through the tunnel.
+        required: false
+    logStats:
+        description: Log statistics about HTTP traffic every <seconds>.
+        required: false
+    logfile:
+        description: Specify custom logfile.
+        required: false
+        default: './sauce-connect.log'
+    maxLogsize:
+        description: Rotate logfile after reaching <bytes> size. Disabled by default.
+        required: false
+    maxMissedAcks:
+        description: The maximum amount of keepalive acks that can be missed before the client will trigger a reconnect. (default 30)
+        required: false
+    metricsAddress:
+        description: 'host:port for the internal web server used to expose client side metrics. (default "localhost:8888")'
+        required: false
+    noAutodetect:
+        description: Disable the autodetection of proxy settings.
+        required: false
+    noProxyCaching:
+        description: Disable caching in Sauce Connect. All requests will be sent through the tunnel.
+        required: false
+    noRemoveCollidingTunnels:
+        description: Don't remove identified tunnels with the same name, or any other default tunnels if this is a default tunnel. Jobs will be distributed between these tunnels, enabling load balancing and high availability. By default, colliding tunnels will be removed when Sauce Connect is starting up.
+        required: false
+    noSSLBumpDomains:
+        description: Comma-separated list of domains. Requests whose host matches one of these will not be SSL re-encrypted.
+        required: false
+    pac:
+        description: Proxy autoconfiguration. Can be an http(s) or local file:// (absolute path only) URI.
+        required: false
+    pidfile:
+        description: File that will be created with the pid of the process.
+        required: false
+    proxy:
+        description: Proxy host and port that Sauce Connect should use to connect to the Sauce Labs cloud.
+        required: false
+    proxyTunnel:
+        description: Use the proxy configured with -p for the tunnel connection.
+        required: false
+    proxyUserpwd:
+        description: Username and password required to access the proxy configured with -p.
+        required: false
+    readyfile:
+        description: File that will be touched to signal when tunnel is ready.
+        required: false
+    restUrl:
+        description: 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs support. (default "https://saucelabs.com/rest/v1")'
+        required: false
+    scproxyPort:
+        description: Port on which scproxy will be listening.
+        required: false
+    scproxyReadLimit:
+        description: Rate limit reads in scproxy to X bytes per second. This option can be used to adjust local network transfer rate in order not to overload the tunnel connection.
+        required: false
+    scproxyWriteLimit:
+        description: Rate limit writes in scproxy to X bytes per second. This option can be used to adjust local network transfer rate in order not to overload the tunnel connection.
+        required: false
+    sePort:
+        description: Port on which Sauce Connect's Selenium relay will listen for requests. Selenium commands reaching Connect on this port will be relayed to Sauce Labs securely and reliably through Connect's tunnel (default 4445)
+        required: false
+    sharedTunnel:
+        description: Let sub-accounts of the tunnel owner use the tunnel if requested.
+        required: false
+    tunnelCainfo:
+        description: CA certificate bundle to use for verifying tunnel connections. (default "/usr/local/etc/openssl/cert.pem")
+        required: false
+    tunnelCapath:
+        description: Directory of CA certs to use for verifying tunnel connections. (default "/etc/ssl/certs")
+        required: false
+    tunnelCert:
+        description: 'Specify certificate to use for the tunnel connection, either public or private. Default: private. (default "private")'
+        required: false
+    tunnelDomains:
+        description: Inverse of '--direct-domains'. Only requests for domains in this list will be sent through the tunnel. Overrides '--direct-domains'.
+        required: false
+    tunnelIdentifier:
+        description: Don't automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.
+        required: false
+    verbose:
+        description: Enable verbose logging. Can be used up to two times.
+        required: false
+        default: "true"
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.sauce-connect-args }}
+    - -u ${{ inputs.username }}
+    - -k ${{ inputs.accessKey }}
+    - --cainfo ${{ inputs.cainfo }}
+    - --capath ${{ inputs.capath }}
+    - -c ${{ inputs.configFile }}
+    - -D ${{ inputs.directDomains }}
+    - --dns strings ${{ inputs.dns }}
+    - --doctor ${{ inputs.doctor }}
+    - -F ${{ inputs.fastFailRegexps }}
+    - -z ${{ inputs.logStats }}
+    - -l ${{ inputs.logfile }}
+    - --max-logsize ${{ inputs.maxLogsize }}
+    - -M ${{ inputs.maxMissedAcks }}
+    - --metrics-address ${{ inputs.metricsAddress }}
+    - --no-autodetect ${{ inputs.noAutodetect }}
+    - -N ${{ inputs.noProxyCaching }}
+    - --no-remove-colliding-tunnels ${{ inputs.noRemoveCollidingTunnels }}
+    - -B ${{ inputs.noSSLBumpDomains }}
+    - --pac ${{ inputs.pac }}
+    - -d ${{ inputs.pidfile }}
+    - -p ${{ inputs.proxy }}
+    - -T ${{ inputs.proxyTunnel }}
+    - -w ${{ inputs.proxyUserpwd }}
+    - -f ${{ inputs.readyfile }}
+    - -x ${{ inputs.restUrl }}
+    - -X ${{ inputs.scproxyPort }}
+    - --scproxy-read-limit ${{ inputs.scproxyReadLimit }}
+    - --scproxy-write-limit ${{ inputs.scproxyWriteLimit }}
+    - -P ${{ inputs.sePort }}
+    - -s ${{ inputs.sharedTunnel }}
+    - --tunnel-cainfo ${{ inputs.tunnelCainfo }}
+    - --tunnel-capath ${{ inputs.tunnelCapath }}
+    - --tunnel-cert ${{ inputs.tunnelCert }}
+    - -t ${{ inputs.tunnelDomains }}
+    - -i ${{ inputs.tunnelIdentifier }}
+    - -v ${{ inputs.verbose }}
