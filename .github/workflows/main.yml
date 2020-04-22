@@ -7,7 +7,7 @@ jobs:
         name: Action Test
         steps:
             - uses: actions/checkout@v1
-            - uses: saucelabs/sauce-connect-action@v0.3.0
+            - uses: saucelabs/sauce-connect-action@v0.3.2
 
             - name: "Install Dependencies"
               run: npm install
