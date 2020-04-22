@@ -140,10 +140,11 @@ if test "${34}"; then
 fi
 
 echo "sc $params"
-sc $params &
+/sc $params &
 sleep 0.5
 
-if ! -f $logFile; then
+if [[ ! -f $logFile ]]
+then
     echo "Sauce Connect could not create a log file"
     exit 1
 fi
