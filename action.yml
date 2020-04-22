@@ -56,9 +56,6 @@ inputs:
     pac:
         description: Proxy autoconfiguration. Can be an http(s) or local file:// (absolute path only) URI.
         required: false
-    pidfile:
-        description: File that will be created with the pid of the process.
-        required: false
     proxy:
         description: Proxy host and port that Sauce Connect should use to connect to the Sauce Labs cloud.
         required: false
@@ -122,7 +119,6 @@ runs:
     - ${{ inputs.doctor }}
     - ${{ inputs.fastFailRegexps }}
     - ${{ inputs.logStats }}
-    - ${{ inputs.logfile }}
     - ${{ inputs.maxLogsize }}
     - ${{ inputs.maxMissedAcks }}
     - ${{ inputs.metricsAddress }}
@@ -131,7 +127,6 @@ runs:
     - ${{ inputs.noRemoveCollidingTunnels }}
     - ${{ inputs.noSSLBumpDomains }}
     - ${{ inputs.pac }}
-    - ${{ inputs.pidfile }}
     - ${{ inputs.proxy }}
     - ${{ inputs.proxyTunnel }}
     - ${{ inputs.proxyUserpwd }}
