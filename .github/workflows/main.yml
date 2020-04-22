@@ -2,15 +2,15 @@ name: "PR Checks"
 on: [pull_request, push]
 
 jobs:
-  check_pr:
-    runs-on: ubuntu-latest
-    name: Action Test
-    steps:
-    - uses: actions/checkout@v1
-    - uses: saucelabs/sauce-connect-action@v1
+    test:
+        runs-on: ubuntu-latest
+        name: Action Test
+        steps:
+            - uses: actions/checkout@v1
+            - uses: saucelabs/sauce-connect-action@v0.2.0
 
-    - name: "Install Dependencies"
-      run: npm install
+            - name: "Install Dependencies"
+              run: npm install
 
-    - name: "Run Test"
-      run: npm test
+            - name: "Run Test"
+              run: npm test
