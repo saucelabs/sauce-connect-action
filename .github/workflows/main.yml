@@ -1,5 +1,5 @@
 name: "PR Checks"
-on: create
+on: push
 
 jobs:
     test:

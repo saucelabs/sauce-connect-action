@@ -26,7 +26,9 @@ let browser
     () => process.exit(0),
     async (e) => {
         console.error(e)
-        await browser.deleteSession()
+        if (browser) {
+            await browser.deleteSession()
+        }
         process.exit(1)
     }
 )
