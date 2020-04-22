@@ -116,39 +116,39 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - -u ${{ inputs.username }}
-    - -k ${{ inputs.accessKey }}
-    - --cainfo ${{ inputs.cainfo }}
-    - --capath ${{ inputs.capath }}
-    - -c ${{ inputs.configFile }}
-    - -D ${{ inputs.directDomains }}
-    - --dns ${{ inputs.dns }}
-    - --doctor ${{ inputs.doctor }}
-    - -F ${{ inputs.fastFailRegexps }}
-    - -z ${{ inputs.logStats }}
-    - -l ${{ inputs.logfile }}
-    - --max-logsize ${{ inputs.maxLogsize }}
-    - -M ${{ inputs.maxMissedAcks }}
-    - --metrics-address ${{ inputs.metricsAddress }}
-    - --no-autodetect ${{ inputs.noAutodetect }}
-    - -N ${{ inputs.noProxyCaching }}
-    - --no-remove-colliding-tunnels ${{ inputs.noRemoveCollidingTunnels }}
-    - -B ${{ inputs.noSSLBumpDomains }}
-    - --pac ${{ inputs.pac }}
-    - -d ${{ inputs.pidfile }}
-    - -p ${{ inputs.proxy }}
-    - -T ${{ inputs.proxyTunnel }}
-    - -w ${{ inputs.proxyUserpwd }}
-    - -f ${{ inputs.readyfile }}
-    - -x ${{ inputs.restUrl }}
-    - -X ${{ inputs.scproxyPort }}
-    - --scproxy-read-limit ${{ inputs.scproxyReadLimit }}
-    - --scproxy-write-limit ${{ inputs.scproxyWriteLimit }}
-    - -P ${{ inputs.sePort }}
-    - -s ${{ inputs.sharedTunnel }}
-    - --tunnel-cainfo ${{ inputs.tunnelCainfo }}
-    - --tunnel-capath ${{ inputs.tunnelCapath }}
-    - --tunnel-cert ${{ inputs.tunnelCert }}
-    - -t ${{ inputs.tunnelDomains }}
-    - -i ${{ inputs.tunnelIdentifier }}
-    - -v ${{ inputs.verbose }}
+    - ${{ inputs.username }}
+    - ${{ inputs.accessKey }}
+    - ${{ inputs.cainfo }}
+    - ${{ inputs.capath }}
+    - ${{ inputs.configFile }}
+    - ${{ inputs.directDomains }}
+    - ${{ inputs.dns }}
+    - ${{ inputs.doctor }}
+    - ${{ inputs.fastFailRegexps }}
+    - ${{ inputs.logStats }}
+    - ${{ inputs.logfile }}
+    - ${{ inputs.maxLogsize }}
+    - ${{ inputs.maxMissedAcks }}
+    - ${{ inputs.metricsAddress }}
+    - ${{ inputs.noAutodetect }}
+    - ${{ inputs.noProxyCaching }}
+    - ${{ inputs.noRemoveCollidingTunnels }}
+    - ${{ inputs.noSSLBumpDomains }}
+    - ${{ inputs.pac }}
+    - ${{ inputs.pidfile }}
+    - ${{ inputs.proxy }}
+    - ${{ inputs.proxyTunnel }}
+    - ${{ inputs.proxyUserpwd }}
+    - ${{ inputs.readyfile }}
+    - ${{ inputs.restUrl }}
+    - ${{ inputs.scproxyPort }}
+    - ${{ inputs.scproxyReadLimit }}
+    - ${{ inputs.scproxyWriteLimit }}
+    - ${{ inputs.sePort }}
+    - ${{ inputs.sharedTunnel }}
+    - ${{ inputs.tunnelCainfo }}
+    - ${{ inputs.tunnelCapath }}
+    - ${{ inputs.tunnelCert }}
+    - ${{ inputs.tunnelDomains }}
+    - ${{ inputs.tunnelIdentifier }}
+    - ${{ inputs.verbose }}
