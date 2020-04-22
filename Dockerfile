@@ -9,4 +9,6 @@ LABEL "com.github.actions.description"="A GitHub action to launch Sauce Connect 
 LABEL "com.github.actions.icon"="server"
 LABEL "com.github.actions.color"="green"
 
+COPY "entrypoint.sh" "/entrypoint.sh"
+
 ENTRYPOINT ["/entrypoint.sh"]

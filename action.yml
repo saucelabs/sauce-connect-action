@@ -122,7 +122,7 @@ runs:
     - --capath ${{ inputs.capath }}
     - -c ${{ inputs.configFile }}
     - -D ${{ inputs.directDomains }}
-    - --dns strings ${{ inputs.dns }}
+    - --dns ${{ inputs.dns }}
     - --doctor ${{ inputs.doctor }}
     - -F ${{ inputs.fastFailRegexps }}
     - -z ${{ inputs.logStats }}
