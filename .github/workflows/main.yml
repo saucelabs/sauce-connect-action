@@ -11,7 +11,7 @@ jobs:
               with:
                 username: ${{ secrets.SAUCE_USERNAME }}
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-                tunnelIdentifier: $GITHUB_SHA
+                tunnelIdentifier: $GITHUB_ACTION
 
             - name: "Install Dependencies"
               run: npm install
