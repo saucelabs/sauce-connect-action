@@ -1,5 +1,5 @@
 name: "PR Checks"
-on: [release]
+on: create
 
 jobs:
     test:
