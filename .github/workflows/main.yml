@@ -11,7 +11,7 @@ jobs:
               with:
                 username: ${{ secrets.SAUCE_USERNAME }}
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-                sePort: 4445
+                tunnelIdentifier: $GITHUB_SHA
 
             - name: "Install Dependencies"
               run: npm install

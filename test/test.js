@@ -4,7 +4,6 @@ const { remote } = require('webdriverio')
 let browser
 ;(async () => {
     browser = await remote({
-        port: 4445,
         user: process.env.SAUCE_USERNAME,
         key: process.env.SAUCE_ACCESS_KEY,
         capabilities: {
