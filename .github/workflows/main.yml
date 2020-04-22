@@ -11,7 +11,7 @@ jobs:
               with:
                 username: ${{ secrets.SAUCE_USERNAME }}
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-                scproxyPort: 4445
+                sePort: 4445
 
             - name: "Install Dependencies"
               run: npm install
