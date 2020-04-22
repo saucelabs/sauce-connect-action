@@ -16,7 +16,7 @@ let browser
         }
     })
 
-    await browser.url('http://localhost:8080')
+    await browser.url('http://127.0.0.1:8080')
 
     const body = await browser.$('body')
     assert.equal(await body.getText(), 'Hello World!')
