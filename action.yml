@@ -1,6 +1,10 @@
 # action.yml
 name: 'Sauce Connect Proxy Action'
 description: 'A GitHub action to launch Sauce Connect Proxy'
+author: Christian Bromann
+branding:
+  icon: server
+  color: red
 inputs:
     username:
         description: Sauce Labs user name.
