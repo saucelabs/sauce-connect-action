@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/saucelabs/sauce-connect-action#readme",
   "devDependencies": {
-    "webdriverio": "^5.13.2"
+    "webdriverio": "^6.1.2"
   }
 }
