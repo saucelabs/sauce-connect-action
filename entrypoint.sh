@@ -137,7 +137,7 @@ if test "${33}"; then
 fi
 
 echo "sc $params"
-sc $params &
+/sc $params &
 sleep 0.5
 
 if [[ ! -f $logFile ]]
