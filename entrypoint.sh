@@ -1,7 +1,7 @@
 #!/bin/bash
 
-logFile="/Users/christianbromann/sauce-connect.log"
-pidFile="/Users/christianbromann/sauce-connect.pid"
+logFile="/srv/sauce-connect.log"
+pidFile="/srv/sauce-connect.pid"
 params="--logfile=$logFile --pidfile=$pidFile --verbose"
 
 if test "${1}" ; then
