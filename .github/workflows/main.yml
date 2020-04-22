@@ -7,7 +7,10 @@ jobs:
         name: Action Test
         steps:
             - uses: actions/checkout@v1
-            - uses: saucelabs/sauce-connect-action@v0.3.6
+            - uses: saucelabs/sauce-connect-action@v0.3.8
+              with:
+                username: ${{ secrets.SAUCE_USERNAME }}
+                accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
 
             - name: "Install Dependencies"
               run: npm install

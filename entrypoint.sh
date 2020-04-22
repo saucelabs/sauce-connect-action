@@ -1,7 +1,8 @@
 #!/bin/bash
 
-logFile="/srv/sauce-connect.log"
-params="--logfile=$logFile --verbose"
+logFile="/Users/christianbromann/sauce-connect.log"
+pidFile="/Users/christianbromann/sauce-connect.pid"
+params="--logfile=$logFile --pidfile=$pidFile --verbose"
 
 if test "${1}" ; then
     params+=" --user=${1}"
@@ -76,71 +77,67 @@ if test "${18}"; then
 fi
 
 if test "${19}"; then
-    params+=" --pidfile=${19}"
+    params+=" --proxy=${19}"
 fi
 
 if test "${20}"; then
-    params+=" --proxy=${20}"
-fi
-
-if test "${21}"; then
     params+=" --proxy-tunnel"
 fi
 
+if test "${21}"; then
+    params+=" --proxy-userpwd=${21}"
+fi
+
 if test "${22}"; then
-    params+=" --proxy-userpwd=${22}"
+    params+=" --readyfile=${22}"
 fi
 
 if test "${23}"; then
-    params+=" --readyfile=${23}"
+    params+=" --rest-url=${23}"
 fi
 
 if test "${24}"; then
-    params+=" --rest-url=${24}"
+    params+=" --scproxy-port=${24}"
 fi
 
 if test "${25}"; then
-    params+=" --scproxy-port=${25}"
+    params+=" --scproxy-read-limit=${25}"
 fi
 
 if test "${26}"; then
-    params+=" --scproxy-read-limit=${26}"
+    params+=" --scproxy-write-limit=${26}"
 fi
 
 if test "${27}"; then
-    params+=" --scproxy-write-limit=${27}"
+    params+=" --se-port=${27}"
 fi
 
 if test "${28}"; then
-    params+=" --se-port=${28}"
-fi
-
-if test "${29}"; then
     params+=" --shared-tunnel"
 fi
 
+if test "${29}"; then
+    params+=" --tunnel-cainfo=${29}"
+fi
+
 if test "${30}"; then
-    params+=" --tunnel-cainfo=${30}"
+    params+=" --tunnel-capath=${30}"
 fi
 
 if test "${31}"; then
-    params+=" --tunnel-capath=${31}"
+    params+=" --tunnel-cert=${31}"
 fi
 
 if test "${32}"; then
-    params+=" --tunnel-cert=${32}"
+    params+=" --tunnel-domains=${32}"
 fi
 
 if test "${33}"; then
-    params+=" --tunnel-domains=${33}"
-fi
-
-if test "${34}"; then
-    params+=" --tunnel-identifier=${34}"
+    params+=" --tunnel-identifier=${33}"
 fi
 
 echo "sc $params"
-/sc $params &
+sc $params &
 sleep 0.5
 
 if [[ ! -f $logFile ]]
@@ -150,8 +147,9 @@ then
 fi
 
 while ! grep "Sauce Connect is up, you may start your tests." $logFile ; do
-    if grep "Goodbye" $logFile ; then
-        echo "Sauce Connect failed starting"
+    if [[ ! -f $pidFile ]]
+    then
+        echo "Sauce Connect shutdown unexpected"
         exit 1
     fi
 
