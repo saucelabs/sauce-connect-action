@@ -35,7 +35,7 @@ inputs:
     logfile:
         description: Specify custom logfile.
         required: false
-        default: './sauce-connect.log'
+        default: '/sauce-connect.log'
     maxLogsize:
         description: Rotate logfile after reaching <bytes> size. Disabled by default.
         required: false
