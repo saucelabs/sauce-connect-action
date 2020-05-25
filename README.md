@@ -123,9 +123,3 @@ Don't automatically assign jobs to this tunnel. Jobs will use it only by explici
 
 ### `verbose`:
 Enable verbose logging. Can be used up to two times. (default "true")
-
-## Example usage
-
-uses: actions/sauce-connect
-with:
-  user: 'my-username'
