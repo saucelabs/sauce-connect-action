@@ -1,4 +1,4 @@
-FROM saucelabs/sauce-connect:4.6.2
+FROM saucelabs/sauce-connect:4.5.4
 
 LABEL version="1.0.0"
 LABEL repository="http://github.com/saucelabs/sauce-connect-action"
