@@ -2,7 +2,7 @@
 
 logFile="/srv/sauce-connect.log"
 pidFile="/srv/sauce-connect.pid"
-params="--logfile=$logFile --pidfile=$pidFile --verbose"
+params="--logfile=$logFile --pidfile=$pidFile --verbose --network=host"
 
 if test "${1}" ; then
     params+=" --user=${1}"
