@@ -1,6 +1,6 @@
 FROM docker:stable
 
-LABEL version="1.0.0"
+LABEL version="1.1.0"
 LABEL repository="http://github.com/saucelabs/sauce-connect-action"
 LABEL homepage="http://github.com/saucelabs/sauce-connect-action"
 LABEL maintainer="Christian Bromann <christian@saucelabs.com>"
