@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "docker": "run-s docker:build docker:tag docker:push:*",
-    "docker:build": "docker build -t saucelabs/sauce-connect .",
+    "docker:build": "docker build -t saucelabs/sauce-connect-action .",
     "docker:push:latest": "docker push saucelabs/sauce-connect-action:latest",
     "docker:push:version": "docker push saucelabs/sauce-connect-action:$npm_package_version",
     "docker:tag": "docker tag saucelabs/sauce-connect-action saucelabs/sauce-connect-action:$npm_package_version",
