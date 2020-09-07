@@ -148,4 +148,3 @@ do
     sleep 5
 done
 echo "SC ready"
-exit
