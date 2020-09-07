@@ -141,7 +141,7 @@ docker run \
     -v /tmp:/tmp \
     --network="host" \
     -t saucelabs/sauce-connect:4.6.2 \
-    $params
+    $params &
 
 until [ -f /tmp/sc.ready ]
 do
