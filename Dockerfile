@@ -1,4 +1,4 @@
-FROM saucelabs/sauce-connect:4.6.2
+FROM docker:stable
 
 LABEL version="1.0.0"
 LABEL repository="http://github.com/saucelabs/sauce-connect-action"
@@ -10,5 +10,5 @@ LABEL "com.github.actions.icon"="server"
 LABEL "com.github.actions.color"="green"
 
 COPY "entrypoint.sh" "/entrypoint.sh"
-
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

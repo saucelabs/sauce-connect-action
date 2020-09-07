@@ -2,7 +2,7 @@
 
 logFile="/srv/sauce-connect.log"
 pidFile="/srv/sauce-connect.pid"
-params="--logfile=$logFile --pidfile=$pidFile --verbose --network=host"
+params="--logfile=$logFile --pidfile=$pidFile --verbose"
 
 if test "${1}" ; then
     params+=" --user=${1}"
@@ -136,25 +136,16 @@ if test "${33}"; then
     params+=" --tunnel-identifier=${33}"
 fi
 
-echo "sc $params"
-/sc $params &
-sleep 0.5
+docker pull saucelabs/sauce-connect:4.6.2
+docker run \
+    -v /tmp:/tmp \
+    --network="host" \
+    -t saucelabs/sauce-connect:4.6.2 \
+    $params
 
-if [[ ! -f $logFile ]]
-then
-    echo "Sauce Connect could not create a log file"
-    exit 1
-fi
-
-while ! grep "Sauce Connect is up, you may start your tests." $logFile ; do
-    if [[ ! -f $pidFile ]]
-    then
-        echo "Sauce Connect shutdown unexpected"
-        exit 1
-    fi
-
-    echo "Sauce Connect is booting..."
-    sleep 1
+until [ -f /tmp/sc.ready ]
+do
+    sleep 5
 done
-
-echo "Started Sauce Connect"
+echo "SC ready"
+exit
