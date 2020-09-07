@@ -11,7 +11,7 @@
     "docker:push:version": "docker push saucelabs/sauce-connect-action:$npm_package_version",
     "docker:tag": "docker tag saucelabs/sauce-connect-action saucelabs/sauce-connect-action:$npm_package_version",
     "test": "run-p test:*",
-    "test:server": "http-server -a 0.0.0.0 ./test",
+    "test:setup": "http-server ./test -p 8080 > /dev/null 2>&1 &",
     "test:run": "node ./test/test.js"
   },
   "repository": {

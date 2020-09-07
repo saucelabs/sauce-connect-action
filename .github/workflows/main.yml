@@ -17,7 +17,7 @@ jobs:
               run: npm install
 
             - name: "Run Test"
-              run: npm test
+              run: npm run test
               env:
                 SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
                 SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
