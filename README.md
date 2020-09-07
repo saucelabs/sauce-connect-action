@@ -85,9 +85,6 @@ Use the proxy configured with -p for the tunnel connection.
 ### `proxyUserpwd`:
 Username and password required to access the proxy configured with -p.
 
-### `readyfile`:
-File that will be touched to signal when tunnel is ready.
-
 ### `restUrl`:
 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs  support. (default "https://saucelabs.com/rest/v1")'
 

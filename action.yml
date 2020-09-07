@@ -69,9 +69,6 @@ inputs:
     proxyUserpwd:
         description: Username and password required to access the proxy configured with -p.
         required: false
-    readyfile:
-        description: File that will be touched to signal when tunnel is ready.
-        required: false
     restUrl:
         description: 'Advanced feature: Connect to Sauce REST API at alternative URL. Use only if directed to do so by Sauce Labs support. (default "https://saucelabs.com/rest/v1")'
         required: false
@@ -134,7 +131,6 @@ runs:
     - ${{ inputs.proxy }}
     - ${{ inputs.proxyTunnel }}
     - ${{ inputs.proxyUserpwd }}
-    - ${{ inputs.readyfile }}
     - ${{ inputs.restUrl }}
     - ${{ inputs.scproxyPort }}
     - ${{ inputs.scproxyReadLimit }}

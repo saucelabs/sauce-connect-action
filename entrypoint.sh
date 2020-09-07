@@ -88,28 +88,24 @@ if test "${21}"; then
     params="${params} --proxy-userpwd=${21}"
 fi
 
-if test "${22}"; then
-    params="${params} --readyfile=${22}"
-fi
-
 if test "${23}"; then
-    params="${params} --rest-url=${23}"
+    params="${params} --rest-url=${22}"
 fi
 
 if test "${24}"; then
-    params="${params} --scproxy-port=${24}"
+    params="${params} --scproxy-port=${23}"
 fi
 
 if test "${25}"; then
-    params="${params} --scproxy-read-limit=${25}"
+    params="${params} --scproxy-read-limit=${24}"
 fi
 
 if test "${26}"; then
-    params="${params} --scproxy-write-limit=${26}"
+    params="${params} --scproxy-write-limit=${25}"
 fi
 
 if test "${27}"; then
-    params="${params} --se-port=${27}"
+    params="${params} --se-port=${26}"
 fi
 
 if test "${28}"; then
@@ -117,34 +113,32 @@ if test "${28}"; then
 fi
 
 if test "${29}"; then
-    params="${params} --tunnel-cainfo=${29}"
+    params="${params} --tunnel-cainfo=${28}"
 fi
 
 if test "${30}"; then
-    params="${params} --tunnel-capath=${30}"
+    params="${params} --tunnel-capath=${29}"
 fi
 
 if test "${31}"; then
-    params="${params} --tunnel-cert=${31}"
+    params="${params} --tunnel-cert=${30}"
 fi
 
 if test "${32}"; then
-    params="${params} --tunnel-domains=${32}"
+    params="${params} --tunnel-domains=${31}"
 fi
 
 if test "${33}"; then
-    params="${params} --tunnel-identifier=${33}"
+    params="${params} --tunnel-identifier=${32}"
 fi
 
 docker pull saucelabs/sauce-connect:4.6.2
 docker run \
-    -v /tmp:/tmp \
     --network="host" \
     -t saucelabs/sauce-connect:4.6.2 \
-    $params &
+    $params \
+    &
 
-until [ -f /tmp/sc.ready ]
-do
-    sleep 5
-done
+# 30 seconds is generally enough for Sauce Connect to start
+sleep 30
 echo "SC ready"
