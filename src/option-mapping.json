@@ -1,0 +1,143 @@
+[
+    {
+        "actionOption": "username",
+        "dockerOption": "user",
+        "required": true
+    },
+    {
+        "actionOption": "accesskey",
+        "dockerOption": "api-key",
+        "required": true
+    },
+    {
+        "actionOption": "cainfo",
+        "dockerOption": "cainfo"
+    },
+    {
+        "actionOption": "capath",
+        "dockerOption": "capath"
+    },
+    {
+        "actionOption": "configFile",
+        "dockerOption": "config-file"
+    },
+    {
+        "actionOption": "dierctDomains",
+        "dockerOption": "direct-domains"
+    },
+    {
+        "actionOption": "dns",
+        "dockerOption": "dns"
+    },
+    {
+        "actionOption": "doctor",
+        "dockerOption": "doctor",
+        "flag": true
+    },
+    {
+        "actionOption": "fastFailRegexps",
+        "dockerOption": "fast-fail-regexps"
+    },
+    {
+        "actionOption": "logStats",
+        "dockerOption": "log-stats"
+    },
+    {
+        "actionOption": "maxLogsize",
+        "dockerOption": "max-logsize"
+    },
+    {
+        "actionOption": "maxMissedAcks",
+        "dockerOption": "max-missed-acks"
+    },
+    {
+        "actionOption": "metricsAddress",
+        "dockerOption": "metrics-address"
+    },
+    {
+        "actionOption": "noAutodetect",
+        "dockerOption": "no-autodetect",
+        "flag": true
+    },
+    {
+        "actionOption": "noProxyCaching",
+        "dockerOption": "no-proxy-caching",
+        "flag": true
+    },
+    {
+        "actionOption": "noRemoveCollidingTunnels",
+        "dockerOption": "no-remove-colliding-tunnels",
+        "flag": true
+    },
+    {
+        "actionOption": "noSSLBumpDomains",
+        "dockerOption": "no-ssl-bump-domains"
+    },
+    {
+        "actionOption": "pac",
+        "dockerOption": "pac"
+    },
+    {
+        "actionOption": "proxy",
+        "dockerOption": "proxy"
+    },
+    {
+        "actionOption": "proxyTunnel",
+        "dockerOption": "proxy-tunnel",
+        "flag": true
+    },
+    {
+        "actionOption": "proxyUserpwd",
+        "dockerOption": "proxy-userpwd"
+    },
+    {
+        "actionOption": "restUrl",
+        "dockerOption": "rest-url"
+    },
+    {
+        "actionOption": "scproxyPort",
+        "dockerOption": "scproxy-port"
+    },
+    {
+        "actionOption": "scproxyReadLimit",
+        "dockerOption": "scproxy-read-limit"
+    },
+    {
+        "actionOption": "scproxyWriteLimit",
+        "dockerOption": "scproxy-write-limit"
+    },
+    {
+        "actionOption": "sePort",
+        "dockerOption": "se-port"
+    },
+    {
+        "actionOption": "sharedTunnel",
+        "dockerOption": "shared-tunnel",
+        "flag": true
+    },
+    {
+        "actionOption": "tunnelCainfo",
+        "dockerOption": "tunnel-cainfo"
+    },
+    {
+        "actionOption": "tunnelCapath",
+        "dockerOption": "tunnel-capath"
+    },
+    {
+        "actionOption": "tunnelCert",
+        "dockerOption": "tunnel-cert"
+    },
+    {
+        "actionOption": "tunnelDomains",
+        "dockerOption": "tunnel-domains"
+    },
+    {
+        "actionOption": "tunnelIdentifier",
+        "dockerOption": "tunnel-identifier"
+    },
+    {
+        "actionOption": "verbose",
+        "dockerOption": "verbose",
+        "flag": true
+    }
+]
