@@ -1563,12 +1563,12 @@ const core_1 = __webpack_require__(186);
 const exec_1 = __webpack_require__(514);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const containerId = core_1.getState('containerId');
+        if (!containerId) {
+            core_1.warning('No state found. Assume that no container run in this workflow run.');
+            return;
+        }
         try {
-            const containerId = core_1.getState('containerId');
-            if (!containerId) {
-                core_1.warning('No state found. Assume that no container run in this workflow run.');
-                return;
-            }
             core_1.info(`Trying to stop the docker container with ID ${containerId}...`);
             yield exec_1.exec('docker', ['container', 'stop', containerId]);
             core_1.info('Done.');
