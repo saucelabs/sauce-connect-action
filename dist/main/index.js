@@ -1564,16 +1564,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(186);
 const exec_1 = __webpack_require__(514);
-const console_1 = __webpack_require__(82);
+const path_1 = __webpack_require__(622);
+const os_1 = __webpack_require__(87);
+const fs_1 = __webpack_require__(747);
+const wait_1 = __webpack_require__(259);
 const option_mapping_json_1 = __importDefault(__webpack_require__(189));
 const CONTAINER_VERSION = '4.6.2';
 const LOG_FILE = '/srv/sauce-connect.log';
 const PID_FILE = '/srv/sauce-connect.pid';
+const READY_FILE = '/opt/sauce-connect-action/sc.ready';
 const optionMappings = option_mapping_json_1.default;
 function buildOptions() {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
+        `--readyfile=${READY_FILE}`,
         `--verbose`
     ];
     for (const optionMapping of optionMappings) {
@@ -1595,39 +1600,75 @@ function buildOptions() {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const DIR_IN_HOST = yield fs_1.promises.mkdtemp(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
         const containerName = `saucelabs/sauce-connect:${CONTAINER_VERSION}`;
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield exec_1.exec('docker', ['pull', containerName]);
-                let containerId = '';
-                yield exec_1.exec('docker', [
-                    'run',
-                    '--network=host',
-                    '--detach',
-                    '--rm',
-                    containerName
-                ].concat(buildOptions()), {
-                    listeners: {
-                        stdout: (data) => {
-                            containerId += data.toString();
-                        }
+        try {
+            yield exec_1.exec('docker', ['pull', containerName]);
+            let containerId = '';
+            yield exec_1.exec('docker', [
+                'run',
+                '--network=host',
+                '--detach',
+                '-v',
+                `${DIR_IN_HOST}:/opt/sauce-connect-action`,
+                '--rm',
+                containerName
+            ].concat(buildOptions()), {
+                listeners: {
+                    stdout: (data) => {
+                        containerId += data.toString();
                     }
-                });
-                core_1.saveState('containerId', containerId.trim());
-                setTimeout(() => {
-                    // 30 seconds is generally enough for Sauce Connect to start
-                    console_1.info('SC ready');
-                    resolve(void 0);
-                }, 30 * 1000);
-            }
-            catch (error) {
-                core_1.setFailed(error.message);
-                reject(error);
-            }
-        }));
+                }
+            });
+            core_1.saveState('containerId', containerId.trim());
+            yield wait_1.wait(DIR_IN_HOST);
+            core_1.info('SC ready');
+        }
+        catch (error) {
+            core_1.setFailed(error.message);
+        }
     });
 }
 run();
+
+
+/***/ }),
+
+/***/ 259:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.wait = void 0;
+const fs_1 = __webpack_require__(747);
+function wait(dir) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                watcher.close();
+                reject(new Error('timeout: SC was not ready even after we wait 60 secs'));
+            }, 60 * 1000);
+            const watcher = fs_1.watch(dir, (eventType, filename) => {
+                if (filename !== 'sc.ready') {
+                    return;
+                }
+                clearTimeout(timeout);
+                watcher.close();
+                resolve(void 0);
+            });
+        });
+    });
+}
+exports.wait = wait;
 
 
 /***/ }),
@@ -1650,13 +1691,6 @@ module.exports = require("assert");;
 /***/ ((module) => {
 
 module.exports = require("child_process");;
-
-/***/ }),
-
-/***/ 82:
-/***/ ((module) => {
-
-module.exports = require("console");;
 
 /***/ }),
 

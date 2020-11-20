@@ -1,11 +1,15 @@
-import {getInput, saveState, setFailed} from '@actions/core'
+import {getInput, info, saveState, setFailed} from '@actions/core'
 import {exec} from '@actions/exec'
-import {info} from 'console'
+import {join} from 'path'
+import {tmpdir} from 'os'
+import {promises} from 'fs'
+import {wait} from './wait'
 import optionMappingJson from './option-mapping.json'
 
 const CONTAINER_VERSION = '4.6.2'
 const LOG_FILE = '/srv/sauce-connect.log'
 const PID_FILE = '/srv/sauce-connect.pid'
+const READY_FILE = '/opt/sauce-connect-action/sc.ready'
 
 type OptionMapping = {
     actionOption: string
@@ -19,6 +23,7 @@ function buildOptions(): string[] {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
+        `--readyfile=${READY_FILE}`,
         `--verbose`
     ]
 
@@ -40,39 +45,38 @@ function buildOptions(): string[] {
 }
 
 async function run(): Promise<void> {
+    const DIR_IN_HOST = await promises.mkdtemp(
+        join(tmpdir(), `sauce-connect-action`)
+    )
     const containerName = `saucelabs/sauce-connect:${CONTAINER_VERSION}`
-    return new Promise<void>(async (resolve, reject) => {
-        try {
-            await exec('docker', ['pull', containerName])
-            let containerId = ''
-            await exec(
-                'docker',
-                [
-                    'run',
-                    '--network=host',
-                    '--detach',
-                    '--rm',
-                    containerName
-                ].concat(buildOptions()),
-                {
-                    listeners: {
-                        stdout: (data: Buffer) => {
-                            containerId += data.toString()
-                        }
+    try {
+        await exec('docker', ['pull', containerName])
+        let containerId = ''
+        await exec(
+            'docker',
+            [
+                'run',
+                '--network=host',
+                '--detach',
+                '-v',
+                `${DIR_IN_HOST}:/opt/sauce-connect-action`,
+                '--rm',
+                containerName
+            ].concat(buildOptions()),
+            {
+                listeners: {
+                    stdout: (data: Buffer) => {
+                        containerId += data.toString()
                     }
                 }
-            )
-            saveState('containerId', containerId.trim())
-            setTimeout(() => {
-                // 30 seconds is generally enough for Sauce Connect to start
-                info('SC ready')
-                resolve(void 0)
-            }, 30 * 1000)
-        } catch (error) {
-            setFailed(error.message)
-            reject(error)
-        }
-    })
+            }
+        )
+        saveState('containerId', containerId.trim())
+        await wait(DIR_IN_HOST)
+        info('SC ready')
+    } catch (error) {
+        setFailed(error.message)
+    }
 }
 
 run()
