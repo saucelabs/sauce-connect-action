@@ -107,39 +107,6 @@ inputs:
         required: false
         default: "true"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.username }}
-    - ${{ inputs.accessKey }}
-    - ${{ inputs.cainfo }}
-    - ${{ inputs.capath }}
-    - ${{ inputs.configFile }}
-    - ${{ inputs.directDomains }}
-    - ${{ inputs.dns }}
-    - ${{ inputs.doctor }}
-    - ${{ inputs.fastFailRegexps }}
-    - ${{ inputs.logStats }}
-    - ${{ inputs.maxLogsize }}
-    - ${{ inputs.maxMissedAcks }}
-    - ${{ inputs.metricsAddress }}
-    - ${{ inputs.noAutodetect }}
-    - ${{ inputs.noProxyCaching }}
-    - ${{ inputs.noRemoveCollidingTunnels }}
-    - ${{ inputs.noSSLBumpDomains }}
-    - ${{ inputs.pac }}
-    - ${{ inputs.proxy }}
-    - ${{ inputs.proxyTunnel }}
-    - ${{ inputs.proxyUserpwd }}
-    - ${{ inputs.restUrl }}
-    - ${{ inputs.scproxyPort }}
-    - ${{ inputs.scproxyReadLimit }}
-    - ${{ inputs.scproxyWriteLimit }}
-    - ${{ inputs.sePort }}
-    - ${{ inputs.sharedTunnel }}
-    - ${{ inputs.tunnelCainfo }}
-    - ${{ inputs.tunnelCapath }}
-    - ${{ inputs.tunnelCert }}
-    - ${{ inputs.tunnelDomains }}
-    - ${{ inputs.tunnelIdentifier }}
-    - ${{ inputs.verbose }}
+  using: 'node12'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'

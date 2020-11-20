@@ -17,18 +17,34 @@
     "saucelabs"
   ],
   "scripts": {
-    "docker": "run-s docker:build docker:tag docker:push:*",
-    "docker:build": "docker build -t saucelabs/sauce-connect-action .",
-    "docker:push:latest": "docker push saucelabs/sauce-connect-action:latest",
-    "docker:push:version": "docker push saucelabs/sauce-connect-action:$npm_package_version",
-    "docker:tag": "docker tag saucelabs/sauce-connect-action saucelabs/sauce-connect-action:$npm_package_version",
-    "test": "run-p test:*",
-    "test:setup": "http-server ./test -p 8080 > /dev/null 2>&1 &",
-    "test:run": "node ./test/test.js"
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "build": "ncc build src/main.ts -o dist/main && ncc build src/post.ts -o dist/post",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "all": "npm run build && npm run format && npm run lint && npm run coverage"
   },
   "devDependencies": {
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.7",
+    "@typescript-eslint/parser": "^4.7.0",
+    "@vercel/ncc": "^0.25.1",
+    "eslint": "^7.13.0",
+    "eslint-plugin-github": "^4.1.1",
     "http-server": "^0.12.3",
+    "jest": "^26.6.3",
+    "js-yaml": "^3.14.0",
+    "mocha": "^8.2.1",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
+    "prettier": "^2.1.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5",
     "webdriverio": "^6.4.6"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4"
   }
 }
