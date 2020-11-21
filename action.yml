@@ -106,6 +106,10 @@ inputs:
         description: Enable verbose logging. Can be used up to two times.
         required: false
         default: "true"
+    scVersion:
+        description: Version of the saucelabs/sauce-connect docker image.
+        required: false
+        default: "4.6.2"
 runs:
   using: 'node12'
   main: 'dist/main/index.js'

@@ -17,6 +17,7 @@ jobs:
                 username: ${{ secrets.SAUCE_USERNAME }}
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                 tunnelIdentifier: github-action-tunnel
+                scVersion: 4.6.2
             # ...
 ```
 
@@ -120,3 +121,6 @@ Don't automatically assign jobs to this tunnel. Jobs will use it only by explici
 
 ### `verbose`:
 Enable verbose logging. Can be used up to two times. (default "true")
+
+### `scVersion`:
+Version of the saucelabs/sauce-connect docker image.

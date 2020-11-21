@@ -6,7 +6,6 @@ import {promises} from 'fs'
 import {wait} from './wait'
 import optionMappingJson from './option-mapping.json'
 
-const CONTAINER_VERSION = '4.6.2'
 const LOG_FILE = '/srv/sauce-connect.log'
 const PID_FILE = '/srv/sauce-connect.pid'
 const READY_FILE = '/opt/sauce-connect-action/sc.ready'
@@ -48,7 +47,8 @@ async function run(): Promise<void> {
     const DIR_IN_HOST = await promises.mkdtemp(
         join(tmpdir(), `sauce-connect-action`)
     )
-    const containerName = `saucelabs/sauce-connect:${CONTAINER_VERSION}`
+    const containerVersion = getInput('scVersion')
+    const containerName = `saucelabs/sauce-connect:${containerVersion}`
     try {
         await exec('docker', ['pull', containerName])
         let containerId = ''
