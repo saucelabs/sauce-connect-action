@@ -21,7 +21,10 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "build": "ncc build src/main.ts -o dist/main && ncc build src/post.ts -o dist/post",
-    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "test": "run-p test:*",
+    "test:run": "node ./test/test.js",
+    "test:setup": "http-server ./test -p 8080 > /dev/null 2>&1 &",
+    "test:mocha": "mocha -r ts-node/register test/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "all": "npm run build && npm run format && npm run lint && npm run coverage"
   },
