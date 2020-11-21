@@ -1569,7 +1569,6 @@ const os_1 = __webpack_require__(87);
 const fs_1 = __webpack_require__(747);
 const wait_1 = __webpack_require__(259);
 const option_mapping_json_1 = __importDefault(__webpack_require__(189));
-const CONTAINER_VERSION = '4.6.2';
 const LOG_FILE = '/srv/sauce-connect.log';
 const PID_FILE = '/srv/sauce-connect.pid';
 const READY_FILE = '/opt/sauce-connect-action/sc.ready';
@@ -1601,7 +1600,8 @@ function buildOptions() {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const DIR_IN_HOST = yield fs_1.promises.mkdtemp(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
-        const containerName = `saucelabs/sauce-connect:${CONTAINER_VERSION}`;
+        const containerVersion = core_1.getInput('scVersion');
+        const containerName = `saucelabs/sauce-connect:${containerVersion}`;
         try {
             yield exec_1.exec('docker', ['pull', containerName]);
             let containerId = '';
