@@ -1,5 +1,5 @@
-import {getState, info, warning, setFailed} from '@actions/core'
-import {exec} from '@actions/exec'
+import {getState, warning, setFailed} from '@actions/core'
+import {stopContainer} from './stop-container'
 
 async function run(): Promise<void> {
     const containerId = getState('containerId')
@@ -10,13 +10,8 @@ async function run(): Promise<void> {
         return
     }
 
-    try {
-        info(`Trying to stop the docker container with ID ${containerId}...`)
-        await exec('docker', ['container', 'stop', containerId])
-        info('Done.')
-    } catch (error) {
-        setFailed(error.message)
-    }
+    await stopContainer(containerId)
 }
 
-run()
+// eslint-disable-next-line github/no-then
+run().catch(error => setFailed(error.message))
