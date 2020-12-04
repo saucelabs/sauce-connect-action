@@ -18,7 +18,7 @@ async function run(): Promise<void> {
             }
             const delay = retryDelays[Math.min(retryDelays.length - 1, i)]
             warning(
-                `Error occurred on attempt ${i}. Retrying in ${delay} ms...`
+                `Error occurred on attempt ${i + 1}. Retrying in ${delay} ms...`
             )
             await new Promise(resolve => setTimeout(() => resolve(), delay))
         }
