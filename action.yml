@@ -3,8 +3,8 @@ name: 'Sauce Connect Proxy Action'
 description: 'A GitHub action to launch Sauce Connect Proxy'
 author: Christian Bromann
 branding:
-  icon: server
-  color: red
+    icon: server
+    color: red
 inputs:
     username:
         description: Sauce Labs user name.
@@ -25,7 +25,7 @@ inputs:
         description: Comma-separated list of domains. Requests whose host matches one of these will be relayed directly through the internet, instead of through the tunnel.
         required: false
     dns:
-        description: "Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53"
+        description: 'Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53'
         required: false
     doctor:
         description: Perform checks to detect possible misconfiguration or problems.
@@ -105,12 +105,16 @@ inputs:
     verbose:
         description: Enable verbose logging. Can be used up to two times.
         required: false
-        default: "true"
+        default: 'true'
     scVersion:
         description: Version of the saucelabs/sauce-connect docker image.
         required: false
-        default: "4.6.2"
+        default: '4.6.2'
+    retryTimeout:
+        description: Do not retry if this amount of seconds has passed since starting.
+        required: false
+        default: '0'
 runs:
-  using: 'node12'
-  main: 'dist/main/index.js'
-  post: 'dist/post/index.js'
+    using: 'node12'
+    main: 'dist/main/index.js'
+    post: 'dist/post/index.js'

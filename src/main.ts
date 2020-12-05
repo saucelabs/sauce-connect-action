@@ -4,7 +4,7 @@ import {start} from './start'
 const retryDelays = [1, 1, 1, 2, 3, 4, 5, 10, 20, 40, 60].map(a => a * 1000)
 
 async function run(): Promise<void> {
-    const retryTimeout = parseInt(getInput('retryTimeout') || '0', 10) * 1000
+    const retryTimeout = parseInt(getInput('retryTimeout'), 10) * 1000
     const startTime = Date.now()
 
     for (let i = 0; ; i++) {
