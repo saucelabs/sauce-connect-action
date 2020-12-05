@@ -74,9 +74,10 @@ export async function start(): Promise<string> {
     containerId = containerId.trim()
     try {
         await wait(DIR_IN_HOST)
-        info('SC ready')
-    } finally {
+    } catch (e) {
         await stopContainer(containerId)
+        throw e
     }
+    info('SC ready')
     return containerId
 }
