@@ -1,5 +1,5 @@
 import {getInput, saveState, setFailed, warning} from '@actions/core'
-import {start} from './start'
+import {startContainer} from './start-container'
 
 const retryDelays = [1, 1, 1, 2, 3, 4, 5, 10, 20, 40, 60].map(a => a * 1000)
 
@@ -9,7 +9,7 @@ async function run(): Promise<void> {
 
     for (let i = 0; ; i++) {
         try {
-            const containerId = await start()
+            const containerId = await startContainer()
             saveState('containerId', containerId)
             return
         } catch (e) {

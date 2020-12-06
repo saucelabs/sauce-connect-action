@@ -44,7 +44,7 @@ function buildOptions(): string[] {
     return params
 }
 
-export async function start(): Promise<string> {
+export async function startContainer(): Promise<string> {
     const DIR_IN_HOST = await promises.mkdtemp(
         join(tmpdir(), `sauce-connect-action`)
     )
