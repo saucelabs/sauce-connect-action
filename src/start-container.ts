@@ -82,7 +82,7 @@ export async function startContainer(): Promise<string> {
     } finally {
         if (isDebug()) {
             try {
-                const log = promises.readFile(
+                const log = await promises.readFile(
                     join(DIR_IN_HOST, 'sauce-connect.log'),
                     {
                         encoding: 'utf-8'
