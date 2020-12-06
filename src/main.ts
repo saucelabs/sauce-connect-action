@@ -22,8 +22,8 @@ async function run(): Promise<void> {
             )
             await new Promise(resolve => setTimeout(() => resolve(), delay))
         }
-        throw new Error('Timed out')
     }
+    throw new Error('Timed out')
 }
 
 // eslint-disable-next-line github/no-then
