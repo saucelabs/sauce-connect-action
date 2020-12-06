@@ -1,4 +1,4 @@
-import {getInput, info, debug, isDebug} from '@actions/core'
+import {getInput, info, debug, isDebug, warning} from '@actions/core'
 import {exec} from '@actions/exec'
 import {join} from 'path'
 import {tmpdir} from 'os'
@@ -73,13 +73,15 @@ export async function startContainer(): Promise<string> {
         )
     ).trim()
 
+    let errorOccurred = false
     try {
         await wait(DIR_IN_HOST)
     } catch (e) {
+        errorOccurred = true
         await stopContainer(containerId)
         throw e
     } finally {
-        if (isDebug()) {
+        if (errorOccurred || isDebug()) {
             try {
                 const log = await promises.readFile(
                     join(DIR_IN_HOST, 'sauce-connect.log'),
@@ -87,7 +89,8 @@ export async function startContainer(): Promise<string> {
                         encoding: 'utf-8'
                     }
                 )
-                debug(`Sauce connect log: ${log}`)
+
+                ;(errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
             } catch {
                 //
             }
