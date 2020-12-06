@@ -1,4 +1,4 @@
-import {getInput, info} from '@actions/core'
+import {getInput, info, debug, isDebug} from '@actions/core'
 import {exec} from '@actions/exec'
 import {join} from 'path'
 import {tmpdir} from 'os'
@@ -7,9 +7,11 @@ import {wait} from './wait'
 import optionMappingJson from './option-mapping.json'
 import {stopContainer} from './stop-container'
 
-const LOG_FILE = '/srv/sauce-connect.log'
+const DIR_IN_CONTAINER = '/opt/sauce-connect-action'
+
 const PID_FILE = '/srv/sauce-connect.pid'
-const READY_FILE = '/opt/sauce-connect-action/sc.ready'
+const LOG_FILE = join(DIR_IN_CONTAINER, 'sauce-connect.log')
+const READY_FILE = join(DIR_IN_CONTAINER, 'sc.ready')
 
 type OptionMapping = {
     actionOption: string
@@ -59,7 +61,7 @@ export async function startContainer(): Promise<string> {
             '--network=host',
             '--detach',
             '-v',
-            `${DIR_IN_HOST}:/opt/sauce-connect-action`,
+            `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
             '--rm',
             containerName
         ].concat(buildOptions()),
@@ -77,6 +79,20 @@ export async function startContainer(): Promise<string> {
     } catch (e) {
         await stopContainer(containerId)
         throw e
+    } finally {
+        if (isDebug()) {
+            try {
+                const log = promises.readFile(
+                    join(DIR_IN_HOST, 'sauce-connect.log'),
+                    {
+                        encoding: 'utf-8'
+                    }
+                )
+                debug(`Sauce connect log: ${log}`)
+            } catch {
+                //
+            }
+        }
     }
     info('SC ready')
     return containerId
