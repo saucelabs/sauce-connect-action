@@ -7,13 +7,12 @@ export async function stopContainer(containerId: string): Promise<void> {
     const running =
         (
             await execAndReturn('docker', [
-                'container',
-                'inspect',
+                'ps',
+                '-q',
                 '-f',
-                '{{.State.Running}}',
-                containerId
+                `id=${containerId}`
             ])
-        ).trim() === 'true'
+        ).trim() !== ''
 
     if (running) {
         await exec('docker', ['container', 'stop', containerId])
