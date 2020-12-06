@@ -160,4 +160,4 @@ Version of the saucelabs/sauce-connect docker image.
 
 ### `retryTimeout`:
 
-Do not retry if this amount of seconds has passed since starting. (default: "0")
+Do not retry if this amount of minutes has passed since starting. (default: "10")
