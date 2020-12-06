@@ -6,6 +6,7 @@ import {promises} from 'fs'
 import {wait} from './wait'
 import optionMappingJson from './option-mapping.json'
 import {stopContainer} from './stop-container'
+import {execAndReturn} from './exec-and-return'
 
 const DIR_IN_CONTAINER = '/opt/sauce-connect-action'
 
@@ -53,27 +54,22 @@ export async function startContainer(): Promise<string> {
     const containerVersion = getInput('scVersion')
     const containerName = `saucelabs/sauce-connect:${containerVersion}`
     await exec('docker', ['pull', containerName])
-    let containerId = ''
-    await exec(
-        'docker',
-        [
-            'run',
-            '--network=host',
-            '--detach',
-            '-v',
-            `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
-            '--rm',
-            containerName
-        ].concat(buildOptions()),
-        {
-            listeners: {
-                stdout: (data: Buffer) => {
-                    containerId += data.toString()
-                }
-            }
-        }
-    )
-    containerId = containerId.trim()
+
+    const containerId = (
+        await execAndReturn(
+            'docker',
+            [
+                'run',
+                '--network=host',
+                '--detach',
+                '-v',
+                `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
+                '--rm',
+                containerName
+            ].concat(buildOptions())
+        )
+    ).trim()
+
     try {
         await wait(DIR_IN_HOST)
     } catch (e) {
