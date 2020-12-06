@@ -26,9 +26,12 @@ function buildOptions(): string[] {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
-        `--readyfile=${READY_FILE}`,
-        `--verbose`
+        `--readyfile=${READY_FILE}`
     ]
+
+    if (isDebug()) {
+        params.push('--verbose')
+    }
 
     for (const optionMapping of optionMappings) {
         const input = getInput(optionMapping.actionOption, {
