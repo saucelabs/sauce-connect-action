@@ -20,7 +20,7 @@ async function run(): Promise<void> {
             warning(
                 `Error occurred on attempt ${i + 1}. Retrying in ${delay} ms...`
             )
-            await new Promise(resolve => setTimeout(() => resolve(), delay))
+            await new Promise<void>(resolve => setTimeout(resolve, delay))
         }
     }
     throw new Error('Timed out')

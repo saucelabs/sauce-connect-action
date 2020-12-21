@@ -1545,7 +1545,86 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
+/***/ 652:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.execAndReturn = void 0;
+const exec_1 = __webpack_require__(514);
+function execAndReturn(commandLine, args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let output = '';
+        yield exec_1.exec(commandLine, args, {
+            listeners: {
+                stdout: (data) => {
+                    output += data.toString();
+                }
+            }
+        });
+        return output;
+    });
+}
+exports.execAndReturn = execAndReturn;
+
+
+/***/ }),
+
 /***/ 399:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __webpack_require__(186);
+const start_container_1 = __webpack_require__(189);
+const retryDelays = [1, 1, 1, 2, 3, 4, 5, 10, 20, 40, 60].map(a => a * 1000);
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const retryTimeout = parseInt(core_1.getInput('retryTimeout'), 10) * 1000 * 60;
+        const startTime = Date.now();
+        for (let i = 0;; i++) {
+            try {
+                const containerId = yield start_container_1.startContainer();
+                core_1.saveState('containerId', containerId);
+                return;
+            }
+            catch (e) {
+                if (Date.now() - startTime >= retryTimeout) {
+                    break;
+                }
+                const delay = retryDelays[Math.min(retryDelays.length - 1, i)];
+                core_1.warning(`Error occurred on attempt ${i + 1}. Retrying in ${delay} ms...`);
+                yield new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+        throw new Error('Timed out');
+    });
+}
+// eslint-disable-next-line github/no-then
+run().catch(error => core_1.setFailed(error.message));
+
+
+/***/ }),
+
+/***/ 189:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1562,24 +1641,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.startContainer = void 0;
 const core_1 = __webpack_require__(186);
 const exec_1 = __webpack_require__(514);
 const path_1 = __webpack_require__(622);
 const os_1 = __webpack_require__(87);
 const fs_1 = __webpack_require__(747);
 const wait_1 = __webpack_require__(259);
-const option_mapping_json_1 = __importDefault(__webpack_require__(189));
-const LOG_FILE = '/srv/sauce-connect.log';
+const option_mapping_json_1 = __importDefault(__webpack_require__(422));
+const stop_container_1 = __webpack_require__(53);
+const exec_and_return_1 = __webpack_require__(652);
+const DIR_IN_CONTAINER = '/opt/sauce-connect-action';
 const PID_FILE = '/srv/sauce-connect.pid';
-const READY_FILE = '/opt/sauce-connect-action/sc.ready';
+const LOG_FILE = path_1.join(DIR_IN_CONTAINER, 'sauce-connect.log');
+const READY_FILE = path_1.join(DIR_IN_CONTAINER, 'sc.ready');
 const optionMappings = option_mapping_json_1.default;
 function buildOptions() {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
-        `--readyfile=${READY_FILE}`,
-        `--verbose`
+        `--readyfile=${READY_FILE}`
     ];
+    if (core_1.isDebug()) {
+        params.push('--verbose');
+    }
     for (const optionMapping of optionMappings) {
         const input = core_1.getInput(optionMapping.actionOption, {
             required: optionMapping.required
@@ -1597,39 +1682,89 @@ function buildOptions() {
     }
     return params;
 }
-function run() {
+function startContainer() {
     return __awaiter(this, void 0, void 0, function* () {
         const DIR_IN_HOST = yield fs_1.promises.mkdtemp(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
         const containerVersion = core_1.getInput('scVersion');
         const containerName = `saucelabs/sauce-connect:${containerVersion}`;
+        yield exec_1.exec('docker', ['pull', containerName]);
+        const containerId = (yield exec_and_return_1.execAndReturn('docker', [
+            'run',
+            '--network=host',
+            '--detach',
+            '-v',
+            `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
+            '--rm',
+            containerName
+        ].concat(buildOptions()))).trim();
+        let errorOccurred = false;
         try {
-            yield exec_1.exec('docker', ['pull', containerName]);
-            let containerId = '';
-            yield exec_1.exec('docker', [
-                'run',
-                '--network=host',
-                '--detach',
-                '-v',
-                `${DIR_IN_HOST}:/opt/sauce-connect-action`,
-                '--rm',
-                containerName
-            ].concat(buildOptions()), {
-                listeners: {
-                    stdout: (data) => {
-                        containerId += data.toString();
-                    }
-                }
-            });
-            core_1.saveState('containerId', containerId.trim());
             yield wait_1.wait(DIR_IN_HOST);
-            core_1.info('SC ready');
         }
-        catch (error) {
-            core_1.setFailed(error.message);
+        catch (e) {
+            errorOccurred = true;
+            yield stop_container_1.stopContainer(containerId);
+            throw e;
         }
+        finally {
+            if (errorOccurred || core_1.isDebug()) {
+                try {
+                    const log = yield fs_1.promises.readFile(path_1.join(DIR_IN_HOST, 'sauce-connect.log'), {
+                        encoding: 'utf-8'
+                    });
+                    (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
+                }
+                catch (_a) {
+                    //
+                }
+            }
+        }
+        core_1.info('SC ready');
+        return containerId;
     });
 }
-run();
+exports.startContainer = startContainer;
+
+
+/***/ }),
+
+/***/ 53:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.stopContainer = void 0;
+const core_1 = __webpack_require__(186);
+const exec_1 = __webpack_require__(514);
+const exec_and_return_1 = __webpack_require__(652);
+function stopContainer(containerId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core_1.info(`Trying to stop the docker container with ID ${containerId}...`);
+        const running = (yield exec_and_return_1.execAndReturn('docker', [
+            'ps',
+            '-q',
+            '-f',
+            `id=${containerId}`
+        ])).trim() !== '';
+        if (running) {
+            yield exec_1.exec('docker', ['container', 'stop', containerId]);
+        }
+        else {
+            core_1.info('Container not running.');
+        }
+        core_1.info('Done.');
+    });
+}
+exports.stopContainer = stopContainer;
 
 
 /***/ }),
@@ -1673,7 +1808,7 @@ exports.wait = wait;
 
 /***/ }),
 
-/***/ 189:
+/***/ 422:
 /***/ ((module) => {
 
 module.exports = JSON.parse("[{\"actionOption\":\"username\",\"dockerOption\":\"user\",\"required\":true},{\"actionOption\":\"accesskey\",\"dockerOption\":\"api-key\",\"required\":true},{\"actionOption\":\"cainfo\",\"dockerOption\":\"cainfo\"},{\"actionOption\":\"capath\",\"dockerOption\":\"capath\"},{\"actionOption\":\"configFile\",\"dockerOption\":\"config-file\"},{\"actionOption\":\"dierctDomains\",\"dockerOption\":\"direct-domains\"},{\"actionOption\":\"dns\",\"dockerOption\":\"dns\"},{\"actionOption\":\"doctor\",\"dockerOption\":\"doctor\",\"flag\":true},{\"actionOption\":\"fastFailRegexps\",\"dockerOption\":\"fast-fail-regexps\"},{\"actionOption\":\"logStats\",\"dockerOption\":\"log-stats\"},{\"actionOption\":\"maxLogsize\",\"dockerOption\":\"max-logsize\"},{\"actionOption\":\"maxMissedAcks\",\"dockerOption\":\"max-missed-acks\"},{\"actionOption\":\"metricsAddress\",\"dockerOption\":\"metrics-address\"},{\"actionOption\":\"noAutodetect\",\"dockerOption\":\"no-autodetect\",\"flag\":true},{\"actionOption\":\"noProxyCaching\",\"dockerOption\":\"no-proxy-caching\",\"flag\":true},{\"actionOption\":\"noRemoveCollidingTunnels\",\"dockerOption\":\"no-remove-colliding-tunnels\",\"flag\":true},{\"actionOption\":\"noSSLBumpDomains\",\"dockerOption\":\"no-ssl-bump-domains\"},{\"actionOption\":\"pac\",\"dockerOption\":\"pac\"},{\"actionOption\":\"proxy\",\"dockerOption\":\"proxy\"},{\"actionOption\":\"proxyTunnel\",\"dockerOption\":\"proxy-tunnel\",\"flag\":true},{\"actionOption\":\"proxyUserpwd\",\"dockerOption\":\"proxy-userpwd\"},{\"actionOption\":\"restUrl\",\"dockerOption\":\"rest-url\"},{\"actionOption\":\"scproxyPort\",\"dockerOption\":\"scproxy-port\"},{\"actionOption\":\"scproxyReadLimit\",\"dockerOption\":\"scproxy-read-limit\"},{\"actionOption\":\"scproxyWriteLimit\",\"dockerOption\":\"scproxy-write-limit\"},{\"actionOption\":\"sePort\",\"dockerOption\":\"se-port\"},{\"actionOption\":\"sharedTunnel\",\"dockerOption\":\"shared-tunnel\",\"flag\":true},{\"actionOption\":\"tunnelCainfo\",\"dockerOption\":\"tunnel-cainfo\"},{\"actionOption\":\"tunnelCapath\",\"dockerOption\":\"tunnel-capath\"},{\"actionOption\":\"tunnelCert\",\"dockerOption\":\"tunnel-cert\"},{\"actionOption\":\"tunnelDomains\",\"dockerOption\":\"tunnel-domains\"},{\"actionOption\":\"tunnelIdentifier\",\"dockerOption\":\"tunnel-identifier\"},{\"actionOption\":\"verbose\",\"dockerOption\":\"verbose\",\"flag\":true}]");

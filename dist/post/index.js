@@ -1545,6 +1545,40 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
+/***/ 652:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.execAndReturn = void 0;
+const exec_1 = __webpack_require__(514);
+function execAndReturn(commandLine, args) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let output = '';
+        yield exec_1.exec(commandLine, args, {
+            listeners: {
+                stdout: (data) => {
+                    output += data.toString();
+                }
+            }
+        });
+        return output;
+    });
+}
+exports.execAndReturn = execAndReturn;
+
+
+/***/ }),
+
 /***/ 51:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -1560,7 +1594,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(186);
-const exec_1 = __webpack_require__(514);
+const stop_container_1 = __webpack_require__(53);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const containerId = core_1.getState('containerId');
@@ -1568,17 +1602,52 @@ function run() {
             core_1.warning('No state found. Assume that no container run in this workflow run.');
             return;
         }
-        try {
-            core_1.info(`Trying to stop the docker container with ID ${containerId}...`);
-            yield exec_1.exec('docker', ['container', 'stop', containerId]);
-            core_1.info('Done.');
-        }
-        catch (error) {
-            core_1.setFailed(error.message);
-        }
+        yield stop_container_1.stopContainer(containerId);
     });
 }
-run();
+// eslint-disable-next-line github/no-then
+run().catch(error => core_1.setFailed(error.message));
+
+
+/***/ }),
+
+/***/ 53:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.stopContainer = void 0;
+const core_1 = __webpack_require__(186);
+const exec_1 = __webpack_require__(514);
+const exec_and_return_1 = __webpack_require__(652);
+function stopContainer(containerId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core_1.info(`Trying to stop the docker container with ID ${containerId}...`);
+        const running = (yield exec_and_return_1.execAndReturn('docker', [
+            'ps',
+            '-q',
+            '-f',
+            `id=${containerId}`
+        ])).trim() !== '';
+        if (running) {
+            yield exec_1.exec('docker', ['container', 'stop', containerId]);
+        }
+        else {
+            core_1.info('Container not running.');
+        }
+        core_1.info('Done.');
+    });
+}
+exports.stopContainer = stopContainer;
 
 
 /***/ }),
