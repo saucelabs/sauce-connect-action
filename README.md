@@ -40,7 +40,7 @@ Directory of CA certs to use for verifying REST connections. (default "/etc/ssl/
 
 ### `configFile`:
 
-Path to YAML config file. Please refer to https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Command+Line +Reference for a sample configuration file.
+Path to YAML config file. Please refer to https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy+Command-Line+Quick+Reference+Guide for a sample configuration file.
 
 ### `directDomains`:
 
