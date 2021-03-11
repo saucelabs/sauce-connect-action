@@ -11,7 +11,8 @@ let browser
             platformName: 'Windows 10',
             browserVersion: 'latest',
             'sauce:options': {
-                tunnelIdentifier: 'github-action-tunnel'
+                tunnelIdentifier: 'github-action-tunnel',
+                build: `Build #${process.env.GITHUB_RUN_NUMBER}`
             }
         }
     })
