@@ -1611,7 +1611,7 @@ function run() {
                     break;
                 }
                 const delay = retryDelays[Math.min(retryDelays.length - 1, i)];
-                core_1.warning(`Error occurred on attempt ${i + 1}. Retrying in ${delay} ms...`);
+                core_1.warning(`Error occurred on attempt ${i + 1} (${e.message}). Retrying in ${delay} ms...`);
                 yield new Promise(resolve => setTimeout(resolve, delay));
             }
         }
