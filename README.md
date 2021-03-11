@@ -16,7 +16,7 @@ jobs:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                   tunnelIdentifier: github-action-tunnel
-                  scVersion: 4.6.2
+                  scVersion: 4.6.4
             # ...
 ```
 

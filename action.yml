@@ -108,7 +108,7 @@ inputs:
     scVersion:
         description: Version of the saucelabs/sauce-connect docker image.
         required: false
-        default: '4.6.2'
+        default: '4.6.4'
     retryTimeout:
         description: Do not retry if this amount of minutes has passed since starting.
         required: false
