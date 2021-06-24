@@ -1685,6 +1685,7 @@ function buildOptions() {
 function startContainer() {
     return __awaiter(this, void 0, void 0, function* () {
         const DIR_IN_HOST = yield fs_1.promises.mkdtemp(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
+        core_1.exportVariable('SAUCE_CONNECT_DIR_IN_HOST', DIR_IN_HOST);
         const containerVersion = core_1.getInput('scVersion');
         const containerName = `saucelabs/sauce-connect:${containerVersion}`;
         yield exec_1.exec('docker', ['pull', containerName]);
