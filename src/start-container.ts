@@ -1,4 +1,4 @@
-import {getInput, info, debug, isDebug, warning} from '@actions/core'
+import {getInput, info, debug, isDebug, warning, exportVariable} from '@actions/core'
 import {exec} from '@actions/exec'
 import {join} from 'path'
 import {tmpdir} from 'os'
@@ -54,6 +54,7 @@ export async function startContainer(): Promise<string> {
     const DIR_IN_HOST = await promises.mkdtemp(
         join(tmpdir(), `sauce-connect-action`)
     )
+    exportVariable('SAUCE_CONNECT_DIR_IN_HOST', DIR_IN_HOST)
     const containerVersion = getInput('scVersion')
     const containerName = `saucelabs/sauce-connect:${containerVersion}`
     await exec('docker', ['pull', containerName])
