@@ -26,7 +26,7 @@ jobs:
 
 **Required** Sauce Labs user name.
 
-### `accesskey`:
+### `accessKey`:
 
 **Required** Sauce Labs API Key.
 

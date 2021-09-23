@@ -9,7 +9,7 @@ inputs:
     username:
         description: Sauce Labs user name.
         required: true
-    accesskey:
+    accessKey:
         description: Sauce Labs API Key.
         required: true
     cainfo:
