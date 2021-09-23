@@ -5,7 +5,7 @@
         "required": true
     },
     {
-        "actionOption": "accesskey",
+        "actionOption": "accessKey",
         "dockerOption": "api-key",
         "required": true
     },
