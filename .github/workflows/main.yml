@@ -20,7 +20,7 @@ jobs:
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                 tunnelName: github-action-tunnel
                 tunnelPool: true
-                configFile: ${{ github.workspace }}/sc-configuration/config.yaml
+                configFile: ${{ github.workspace }}/imnothere.yaml
 
             - name: "Run Test"
               run: npm run test
