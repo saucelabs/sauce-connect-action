@@ -44,7 +44,6 @@ function buildOptions(dirInHost: string): string[] {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
-        `--extra-info='{"runner": "github-action"}'`,
         `--readyfile=${READY_FILE}`
     ]
 
