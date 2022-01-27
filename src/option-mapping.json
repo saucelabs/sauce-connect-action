@@ -14,15 +14,11 @@
         "dockerOption": "cainfo"
     },
     {
-        "actionOption": "capath",
-        "dockerOption": "capath"
-    },
-    {
         "actionOption": "configFile",
         "dockerOption": "config-file"
     },
     {
-        "actionOption": "dierctDomains",
+        "actionOption": "directDomains",
         "dockerOption": "direct-domains"
     },
     {
@@ -30,25 +26,12 @@
         "dockerOption": "dns"
     },
     {
-        "actionOption": "doctor",
-        "dockerOption": "doctor",
-        "flag": true
-    },
-    {
         "actionOption": "fastFailRegexps",
         "dockerOption": "fast-fail-regexps"
     },
     {
-        "actionOption": "logStats",
-        "dockerOption": "log-stats"
-    },
-    {
         "actionOption": "maxLogsize",
         "dockerOption": "max-logsize"
-    },
-    {
-        "actionOption": "maxMissedAcks",
-        "dockerOption": "max-missed-acks"
     },
     {
         "actionOption": "metricsAddress",
@@ -60,13 +43,8 @@
         "flag": true
     },
     {
-        "actionOption": "noProxyCaching",
-        "dockerOption": "no-proxy-caching",
-        "flag": true
-    },
-    {
         "actionOption": "noRemoveCollidingTunnels",
-        "dockerOption": "no-remove-colliding-tunnels",
+        "dockerOption": "tunnel-pool",
         "flag": true
     },
     {
@@ -91,20 +69,12 @@
         "dockerOption": "proxy-userpwd"
     },
     {
-        "actionOption": "restUrl",
-        "dockerOption": "rest-url"
+        "actionOption": "region",
+        "dockerOption": "region"
     },
     {
         "actionOption": "scproxyPort",
         "dockerOption": "scproxy-port"
-    },
-    {
-        "actionOption": "scproxyReadLimit",
-        "dockerOption": "scproxy-read-limit"
-    },
-    {
-        "actionOption": "scproxyWriteLimit",
-        "dockerOption": "scproxy-write-limit"
     },
     {
         "actionOption": "sePort",
@@ -120,20 +90,21 @@
         "dockerOption": "tunnel-cainfo"
     },
     {
-        "actionOption": "tunnelCapath",
-        "dockerOption": "tunnel-capath"
-    },
-    {
-        "actionOption": "tunnelCert",
-        "dockerOption": "tunnel-cert"
-    },
-    {
         "actionOption": "tunnelDomains",
         "dockerOption": "tunnel-domains"
     },
     {
         "actionOption": "tunnelIdentifier",
-        "dockerOption": "tunnel-identifier"
+        "dockerOption": "tunnel-name"
+    },
+    {
+        "actionOption": "tunnelName",
+        "dockerOption": "tunnel-name"
+    },
+    {
+        "actionOption": "tunnelPool",
+        "dockerOption": "tunnel-pool",
+        "flag": true
     },
     {
         "actionOption": "verbose",
