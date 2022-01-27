@@ -1,7 +1,10 @@
 import {getInput, info, debug, isDebug, warning, exportVariable} from '@actions/core'
 import {exec} from '@actions/exec'
+import {basename} from 'path'
 import {join} from 'path'
 import {tmpdir} from 'os'
+import {copyFileSync} from 'fs'
+import {existsSync} from 'fs'
 import {promises} from 'fs'
 import {wait} from './wait'
 import optionMappingJson from './option-mapping.json'
@@ -18,11 +21,26 @@ type OptionMapping = {
     actionOption: string
     dockerOption: string
     required?: boolean
+    relativePath?: boolean
     flag?: boolean
 }
 const optionMappings: OptionMapping[] = optionMappingJson
 
-function buildOptions(): string[] {
+function copyFileToTheSharedVolume(filePath: string, dirInHost: string): string {
+    let srcFile = filePath
+    let destFile = join(dirInHost, basename(filePath))
+    if (!existsSync(filePath)) {
+        let workspace:string = process.env.GITHUB_WORKSPACE || ''
+        srcFile = join(workspace, filePath)
+    }
+    if (!existsSync(srcFile)) {
+        throw new Error(`${filePath} is not found in ${srcFile}`)
+    }
+    copyFileSync(srcFile, destFile)
+    return join(DIR_IN_CONTAINER, basename(filePath))
+}
+
+function buildOptions(dirInHost: string): string[] {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
@@ -44,12 +62,10 @@ function buildOptions(): string[] {
         } else if (optionMapping.flag) {
             // for boolean flag options like `--tunnel-pool`
             params.push(`--${optionMapping.dockerOption}`)
+        } else if (optionMapping.relativePath) {
+            params.push(`--${optionMapping.dockerOption}=${copyFileToTheSharedVolume(input, dirInHost)}`)
         } else {
-            var optionValue = input
-            if optionMapping.dockerOption === "config-file" {
-                optionValue = join(DIR_IN_CONTAINER, input)
-            }
-            params.push(`--${optionMapping.dockerOption}=${optionValue}`)
+            params.push(`--${optionMapping.dockerOption}=${input}`)
         }
     }
     return params
@@ -75,7 +91,7 @@ export async function startContainer(): Promise<string> {
                 `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
                 '--rm',
                 containerName
-            ].concat(buildOptions())
+            ].concat(buildOptions(DIR_IN_HOST))
         )
     ).trim()
 

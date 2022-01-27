@@ -60,4 +60,6 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `sharedTunnel`
 - `tunnelDomains`
 - `tunnelIdentifier`
+- `tunnelName`
+- `tunnelPool`
 - `verbose`

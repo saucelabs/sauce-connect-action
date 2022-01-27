@@ -15,7 +15,8 @@
     },
     {
         "actionOption": "configFile",
-        "dockerOption": "config-file"
+        "dockerOption": "config-file",
+        "relativePath": true
     },
     {
         "actionOption": "directDomains",
@@ -44,7 +45,7 @@
     },
     {
         "actionOption": "noRemoveCollidingTunnels",
-        "dockerOption": "tunnel-pool",
+        "dockerOption": "no-remove-colliding-tunnels",
         "flag": true
     },
     {
