@@ -76,7 +76,10 @@ inputs:
         description: Inverse of '--direct-domains'. Only requests for domains in this list will be sent through the tunnel. Overrides '--direct-domains'.
         required: false
     tunnelIdentifier:
-        description: Don't automatically assign jobs to this tunnel. Jobs will use it only by explicitly providing the right identifier.
+        description: Assigns a name to a Sauce Connect Proxy tunnel. Use tunnelName starting from Sauce Connect v4.7.0.
+        required: false
+    tunnelName:
+        description: Assigns a name to a Sauce Connect Proxy tunnel. Same as tunnelIdentifier.
         required: false
     tunnelPool:
         description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.

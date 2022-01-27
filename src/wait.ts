@@ -6,10 +6,10 @@ export async function wait(dir: string): Promise<unknown> {
             watcher.close()
             reject(
                 new Error(
-                    'timeout: SC was not ready even after we wait 60 secs'
+                    'timeout: SC was not ready even after we wait 45 secs'
                 )
             )
-        }, 60 * 1000)
+        }, 45 * 1000)
 
         const watcher = watch(dir, (eventType, filename) => {
             if (filename !== 'sc.ready') {

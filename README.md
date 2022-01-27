@@ -16,6 +16,7 @@ jobs:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                   tunnelIdentifier: github-action-tunnel
+                  configFile: ${{ github.workspace }}/sc-configuration/config.yaml
                   scVersion: 4.7.1
             # ...
 ```
@@ -29,6 +30,12 @@ jobs:
 ### `accessKey`:
 
 **Required** Sauce Labs API Key.
+
+### `configFile`:
+
+Sauce Connect Proxy [configuration file](https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/yaml-config/).
+
+Only an absolute path to the file is supported at the moment (i.e. must prepend the relative path to the file in the repo with `github.workspace`, see the example above).
 
 ### `scVersion`:
 
@@ -60,4 +67,6 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `sharedTunnel`
 - `tunnelDomains`
 - `tunnelIdentifier`
+- `tunnelName`
+- `tunnelPool`
 - `verbose`
