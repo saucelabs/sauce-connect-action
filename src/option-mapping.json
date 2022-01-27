@@ -96,7 +96,7 @@
     },
     {
         "actionOption": "tunnelIdentifier",
-        "dockerOption": "tunnel-name"
+        "dockerOption": "tunnel-identifier"
     },
     {
         "actionOption": "tunnelName",
