@@ -42,10 +42,14 @@ function buildOptions(): string[] {
         if (input === '') {
             // user input nothing for this option
         } else if (optionMapping.flag) {
-            // for flag options like --doctor option
+            // for boolean flag options like `--tunnel-pool`
             params.push(`--${optionMapping.dockerOption}`)
         } else {
-            params.push(`--${optionMapping.dockerOption}=${input}`)
+            var optionValue = input
+            if optionMapping.dockerOption === "config-file" {
+                optionValue = join(DIR_IN_CONTAINER, input)
+            }
+            params.push(`--${optionMapping.dockerOption}=${optionValue}`)
         }
     }
     return params
