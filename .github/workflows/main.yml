@@ -28,3 +28,9 @@ jobs:
               env:
                 SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
                 SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
+            - uses: actions/upload-artifact@v2
+              if: ${{ failure() }}
+              with:
+                name: sauce-connect-log
+                path: ${{ env.SAUCE_CONNECT_DIR_IN_HOST }}/sauce-connect.log
