@@ -21,7 +21,7 @@ jobs:
                 tunnelName: github-action-tunnel
                 tunnelPool: true
                 configFile: ${{ github.workspace }}/sc-configuration/config.yaml
-                directDomains: domain#
+                fastFailRegexps: "*.adobe.com,*.example.com,.*.correct.com"
 
             - name: "Run Test"
               run: npm run test
