@@ -70,3 +70,33 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `tunnelName`
 - `tunnelPool`
 - `verbose`
+
+## Sauce Connect Proxy log
+
+Sometimes, it's beneficial to have an access to Sauce Connect Proxy log for debugging or for an audit.
+
+It can be done with [upload-artifact](https://github.com/actions/upload-artifact) GitHub Action.
+Optionally, a failure condition may be specified in order to store the log only in case of a failure.
+
+```yaml
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        name: Action Test
+        steps:
+            # ...
+            - uses: saucelabs/sauce-connect-action@v2
+              with:
+                  username: ${{ secrets.SAUCE_USERNAME }}
+                  accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+                  tunnelIdentifier: github-action-tunnel
+                  configFile: ${{ github.workspace }}/sc-configuration/config.yaml
+                  scVersion: 4.7.1
+            # ...
+
+            - uses: actions/upload-artifact@v2
+              if: ${{ failure() }}
+              with:
+                name: sauce-connect-log
+                path: ${{ env.SAUCE_CONNECT_DIR_IN_HOST }}/sauce-connect.log
+```
