@@ -17,7 +17,6 @@ jobs:
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                   tunnelIdentifier: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
-                  scVersion: 4.7.1
             # ...
 ```
 
@@ -39,7 +38,7 @@ Only an absolute path to the file is supported at the moment (i.e. must prepend 
 
 ### `scVersion`:
 
-Version of the saucelabs/sauce-connect docker image.
+(Optional) version of the saucelabs/sauce-connect docker image. Use the latest sauce-connect release by default.
 
 ### `retryTimeout`:
 
@@ -55,7 +54,6 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `fastFailRegexps`
 - `metricsAddress`
 - `noAutodetect`
-- `noRemoveCollidingTunnels`
 - `noSSLBumpDomains`
 - `pac`
 - `proxy`
@@ -91,7 +89,6 @@ jobs:
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                   tunnelIdentifier: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
-                  scVersion: 4.7.1
             # ...
 
             - uses: actions/upload-artifact@v2
