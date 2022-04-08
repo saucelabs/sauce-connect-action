@@ -37,7 +37,7 @@ inputs:
         description: Disable the autodetection of proxy settings.
         required: false
     noRemoveCollidingTunnels:
-        description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
+        description: Denotes a tunnel as part of a high availability tunnel pool. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
         required: false
     noSSLBumpDomains:
         description: Comma-separated list of domains. Requests whose host matches one of these will not be SSL re-encrypted.
@@ -67,7 +67,7 @@ inputs:
         description: Port on which Sauce Connect's Selenium relay will listen for requests. Selenium commands reaching Connect on this port will be relayed to Sauce Labs securely and reliably through Connect's tunnel (default 4445)
         required: false
     sharedTunnel:
-        description: Let sub-accounts of the tunnel owner use the tunnel if requested.
+        description: Share the tunnels within the same organization.
         required: false
     tunnelCainfo:
         description: CA certificate bundle to use for verifying tunnel connections. (default "/usr/local/etc/openssl/cert.pem")
@@ -85,7 +85,7 @@ inputs:
         description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
         required: false
     verbose:
-        description: Enable verbose logging. Can be used up to two times.
+        description: Enable verbose logging.
         required: false
     scVersion:
         description: Version of the saucelabs/sauce-connect docker image.
