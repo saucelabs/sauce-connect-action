@@ -24,11 +24,11 @@ jobs:
 
 ### `username`:
 
-**Required** Sauce Labs user name.
+**Required** Sauce Labs [user name](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/#--user).
 
 ### `accessKey`:
 
-**Required** Sauce Labs API Key.
+**Required** Sauce Labs [API Access Key](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/#--api-key).
 
 ### `configFile`:
 
