@@ -63,6 +63,7 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `scproxyPort`
 - `sePort`
 - `sharedTunnel`
+- `statusAddress`
 - `tunnelDomains`
 - `tunnelIdentifier`
 - `tunnelName`
