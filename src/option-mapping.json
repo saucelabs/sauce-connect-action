@@ -36,7 +36,11 @@
     },
     {
         "actionOption": "metricsAddress",
-        "dockerOption": "metrics-address"
+        "dockerOption": "status-address"
+    },
+    {
+        "actionOption": "statusAddress",
+        "dockerOption": "status-address"
     },
     {
         "actionOption": "noAutodetect",

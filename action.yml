@@ -31,7 +31,7 @@ inputs:
         description: Rotate logfile after reaching <bytes> size. Disabled by default.
         required: false
     metricsAddress:
-        description: 'host:port for the internal web server used to expose client side metrics. (default "localhost:8888")'
+        description: '[DEPRECATED in 4.8.0] host:port for the status server used to expose client metrics.'
         required: false
     noAutodetect:
         description: Disable the autodetection of proxy settings.
@@ -69,6 +69,9 @@ inputs:
     sharedTunnel:
         description: Share the tunnels within the same organization.
         required: false
+    statusAddress:
+        description: 'host:port for the status server used to expose client status.'
+        required: false
     tunnelCainfo:
         description: CA certificate bundle to use for verifying tunnel connections. (default "/usr/local/etc/openssl/cert.pem")
         required: false
@@ -90,7 +93,7 @@ inputs:
     scVersion:
         description: Version of the saucelabs/sauce-connect docker image.
         required: false
-        default: '4.7.1'
+        default: '4.8.0'
     retryTimeout:
         description: Do not retry if this amount of minutes has passed since starting.
         required: false
