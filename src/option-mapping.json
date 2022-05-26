@@ -103,6 +103,10 @@
         "dockerOption": "tunnel-identifier"
     },
     {
+        "actionOption": "experimental",
+        "dockerOption": "experimental"
+    },
+    {
         "actionOption": "tunnelName",
         "dockerOption": "tunnel-name"
     },
