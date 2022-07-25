@@ -15,7 +15,7 @@ jobs:
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-                  tunnelIdentifier: github-action-tunnel
+                  tunnelName: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
 ```
@@ -88,7 +88,7 @@ jobs:
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-                  tunnelIdentifier: github-action-tunnel
+                  tunnelName: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
 
