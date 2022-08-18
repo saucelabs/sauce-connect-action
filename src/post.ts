@@ -1,16 +1,14 @@
 import {getState, warning, setFailed} from '@actions/core'
-import {stopContainer} from './stop-container'
+import {stopSc} from './stop-sc'
 
 async function run(): Promise<void> {
-    const containerId = getState('containerId')
-    if (!containerId) {
-        warning(
-            'No state found. Assume that no container run in this workflow run.'
-        )
+    const pid = getState('scPid')
+    if (!pid) {
+        warning('No state found. Assume that no sc ran in this workflow run.')
         return
     }
 
-    await stopContainer(containerId)
+    await stopSc(pid)
 }
 
 // eslint-disable-next-line github/no-then

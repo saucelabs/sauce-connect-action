@@ -1,119 +1,118 @@
 [
     {
         "actionOption": "username",
-        "dockerOption": "user",
+        "scOption": "user",
         "required": true
     },
     {
         "actionOption": "accessKey",
-        "dockerOption": "api-key",
+        "scOption": "api-key",
         "required": true
     },
     {
         "actionOption": "cainfo",
-        "dockerOption": "cainfo"
+        "scOption": "cainfo"
     },
     {
         "actionOption": "configFile",
-        "dockerOption": "config-file",
-        "relativePath": true
+        "scOption": "config-file"
     },
     {
         "actionOption": "directDomains",
-        "dockerOption": "direct-domains"
+        "scOption": "direct-domains"
     },
     {
         "actionOption": "dns",
-        "dockerOption": "dns"
+        "scOption": "dns"
     },
     {
         "actionOption": "fastFailRegexps",
-        "dockerOption": "fast-fail-regexps"
+        "scOption": "fast-fail-regexps"
     },
     {
         "actionOption": "maxLogsize",
-        "dockerOption": "max-logsize"
+        "scOption": "max-logsize"
     },
     {
         "actionOption": "metricsAddress",
-        "dockerOption": "status-address"
+        "scOption": "status-address"
     },
     {
         "actionOption": "statusAddress",
-        "dockerOption": "status-address"
+        "scOption": "status-address"
     },
     {
         "actionOption": "noAutodetect",
-        "dockerOption": "no-autodetect",
+        "scOption": "no-autodetect",
         "flag": true
     },
     {
         "actionOption": "noRemoveCollidingTunnels",
-        "dockerOption": "no-remove-colliding-tunnels",
+        "scOption": "no-remove-colliding-tunnels",
         "flag": true
     },
     {
         "actionOption": "noSSLBumpDomains",
-        "dockerOption": "no-ssl-bump-domains"
+        "scOption": "no-ssl-bump-domains"
     },
     {
         "actionOption": "pac",
-        "dockerOption": "pac"
+        "scOption": "pac"
     },
     {
         "actionOption": "proxy",
-        "dockerOption": "proxy"
+        "scOption": "proxy"
     },
     {
         "actionOption": "proxyTunnel",
-        "dockerOption": "proxy-tunnel",
+        "scOption": "proxy-tunnel",
         "flag": true
     },
     {
         "actionOption": "proxyUserpwd",
-        "dockerOption": "proxy-userpwd"
+        "scOption": "proxy-userpwd"
     },
     {
         "actionOption": "region",
-        "dockerOption": "region"
+        "scOption": "region"
     },
     {
         "actionOption": "scproxyPort",
-        "dockerOption": "scproxy-port"
+        "scOption": "scproxy-port"
     },
     {
         "actionOption": "sePort",
-        "dockerOption": "se-port"
+        "scOption": "se-port"
     },
     {
         "actionOption": "sharedTunnel",
-        "dockerOption": "shared-tunnel",
+        "scOption": "shared-tunnel",
         "flag": true
     },
     {
         "actionOption": "tunnelCainfo",
-        "dockerOption": "tunnel-cainfo"
+        "scOption": "tunnel-cainfo"
     },
     {
         "actionOption": "tunnelDomains",
-        "dockerOption": "tunnel-domains"
+        "scOption": "tunnel-domains"
     },
     {
         "actionOption": "tunnelIdentifier",
-        "dockerOption": "tunnel-identifier"
+        "scOption": "tunnel-identifier"
     },
     {
         "actionOption": "tunnelName",
-        "dockerOption": "tunnel-name"
+        "scOption": "tunnel-name"
     },
     {
         "actionOption": "tunnelPool",
-        "dockerOption": "tunnel-pool",
+        "scOption": "tunnel-pool",
         "flag": true
     },
     {
         "actionOption": "verbose",
-        "dockerOption": "verbose",
+        "scOption": "verbose",
         "flag": true
     }
 ]
