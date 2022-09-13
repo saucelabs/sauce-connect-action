@@ -1645,21 +1645,38 @@ exports.startContainer = void 0;
 const core_1 = __webpack_require__(186);
 const exec_1 = __webpack_require__(514);
 const path_1 = __webpack_require__(622);
+const path_2 = __webpack_require__(622);
 const os_1 = __webpack_require__(87);
 const fs_1 = __webpack_require__(747);
+const fs_2 = __webpack_require__(747);
+const fs_3 = __webpack_require__(747);
 const wait_1 = __webpack_require__(259);
 const option_mapping_json_1 = __importDefault(__webpack_require__(422));
 const stop_container_1 = __webpack_require__(53);
 const exec_and_return_1 = __webpack_require__(652);
 const DIR_IN_CONTAINER = '/opt/sauce-connect-action';
 const PID_FILE = '/srv/sauce-connect.pid';
-const LOG_FILE = path_1.join(DIR_IN_CONTAINER, 'sauce-connect.log');
-const READY_FILE = path_1.join(DIR_IN_CONTAINER, 'sc.ready');
+const LOG_FILE = path_2.join(DIR_IN_CONTAINER, 'sauce-connect.log');
+const READY_FILE = path_2.join(DIR_IN_CONTAINER, 'sc.ready');
 const optionMappings = option_mapping_json_1.default;
-function buildOptions() {
+function copyFileToTheSharedVolume(filePath, dirInHost) {
+    let srcFile = filePath;
+    let destFile = path_2.join(dirInHost, path_1.basename(filePath));
+    if (!fs_2.existsSync(filePath)) {
+        let workspace = process.env.GITHUB_WORKSPACE || '';
+        srcFile = path_2.join(workspace, filePath);
+    }
+    if (!fs_2.existsSync(srcFile)) {
+        throw new Error(`${filePath} is not found in ${srcFile}`);
+    }
+    fs_1.copyFileSync(srcFile, destFile);
+    return path_2.join(DIR_IN_CONTAINER, path_1.basename(filePath));
+}
+function buildOptions(dirInHost) {
     const params = [
         `--logfile=${LOG_FILE}`,
         `--pidfile=${PID_FILE}`,
+        `--extra-info={"runner": "github-action"}`,
         `--readyfile=${READY_FILE}`
     ];
     if (core_1.isDebug()) {
@@ -1673,8 +1690,11 @@ function buildOptions() {
             // user input nothing for this option
         }
         else if (optionMapping.flag) {
-            // for flag options like --doctor option
+            // for boolean flag options like `--tunnel-pool`
             params.push(`--${optionMapping.dockerOption}`);
+        }
+        else if (optionMapping.relativePath) {
+            params.push(`--${optionMapping.dockerOption}=${copyFileToTheSharedVolume(input, dirInHost)}`);
         }
         else {
             params.push(`--${optionMapping.dockerOption}=${input}`);
@@ -1684,7 +1704,7 @@ function buildOptions() {
 }
 function startContainer() {
     return __awaiter(this, void 0, void 0, function* () {
-        const DIR_IN_HOST = yield fs_1.promises.mkdtemp(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
+        const DIR_IN_HOST = yield fs_3.promises.mkdtemp(path_2.join(os_1.tmpdir(), `sauce-connect-action`));
         core_1.exportVariable('SAUCE_CONNECT_DIR_IN_HOST', DIR_IN_HOST);
         const containerVersion = core_1.getInput('scVersion');
         const containerName = `saucelabs/sauce-connect:${containerVersion}`;
@@ -1697,7 +1717,7 @@ function startContainer() {
             `${DIR_IN_HOST}:${DIR_IN_CONTAINER}`,
             '--rm',
             containerName
-        ].concat(buildOptions()))).trim();
+        ].concat(buildOptions(DIR_IN_HOST)))).trim();
         let errorOccurred = false;
         try {
             yield wait_1.wait(DIR_IN_HOST);
@@ -1710,7 +1730,7 @@ function startContainer() {
         finally {
             if (errorOccurred || core_1.isDebug()) {
                 try {
-                    const log = yield fs_1.promises.readFile(path_1.join(DIR_IN_HOST, 'sauce-connect.log'), {
+                    const log = yield fs_3.promises.readFile(path_2.join(DIR_IN_HOST, 'sauce-connect.log'), {
                         encoding: 'utf-8'
                     });
                     (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
@@ -1791,8 +1811,8 @@ function wait(dir) {
         return new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
                 watcher.close();
-                reject(new Error('timeout: SC was not ready even after we wait 60 secs'));
-            }, 60 * 1000);
+                reject(new Error('timeout: SC was not ready even after we wait 45 secs'));
+            }, 45 * 1000);
             const watcher = fs_1.watch(dir, (eventType, filename) => {
                 if (filename !== 'sc.ready') {
                     return;
@@ -1812,7 +1832,7 @@ exports.wait = wait;
 /***/ 422:
 /***/ ((module) => {
 
-module.exports = JSON.parse("[{\"actionOption\":\"username\",\"dockerOption\":\"user\",\"required\":true},{\"actionOption\":\"accessKey\",\"dockerOption\":\"api-key\",\"required\":true},{\"actionOption\":\"cainfo\",\"dockerOption\":\"cainfo\"},{\"actionOption\":\"capath\",\"dockerOption\":\"capath\"},{\"actionOption\":\"configFile\",\"dockerOption\":\"config-file\"},{\"actionOption\":\"dierctDomains\",\"dockerOption\":\"direct-domains\"},{\"actionOption\":\"dns\",\"dockerOption\":\"dns\"},{\"actionOption\":\"doctor\",\"dockerOption\":\"doctor\",\"flag\":true},{\"actionOption\":\"fastFailRegexps\",\"dockerOption\":\"fast-fail-regexps\"},{\"actionOption\":\"logStats\",\"dockerOption\":\"log-stats\"},{\"actionOption\":\"maxLogsize\",\"dockerOption\":\"max-logsize\"},{\"actionOption\":\"maxMissedAcks\",\"dockerOption\":\"max-missed-acks\"},{\"actionOption\":\"metricsAddress\",\"dockerOption\":\"metrics-address\"},{\"actionOption\":\"noAutodetect\",\"dockerOption\":\"no-autodetect\",\"flag\":true},{\"actionOption\":\"noProxyCaching\",\"dockerOption\":\"no-proxy-caching\",\"flag\":true},{\"actionOption\":\"noRemoveCollidingTunnels\",\"dockerOption\":\"no-remove-colliding-tunnels\",\"flag\":true},{\"actionOption\":\"noSSLBumpDomains\",\"dockerOption\":\"no-ssl-bump-domains\"},{\"actionOption\":\"pac\",\"dockerOption\":\"pac\"},{\"actionOption\":\"proxy\",\"dockerOption\":\"proxy\"},{\"actionOption\":\"proxyTunnel\",\"dockerOption\":\"proxy-tunnel\",\"flag\":true},{\"actionOption\":\"proxyUserpwd\",\"dockerOption\":\"proxy-userpwd\"},{\"actionOption\":\"restUrl\",\"dockerOption\":\"rest-url\"},{\"actionOption\":\"scproxyPort\",\"dockerOption\":\"scproxy-port\"},{\"actionOption\":\"scproxyReadLimit\",\"dockerOption\":\"scproxy-read-limit\"},{\"actionOption\":\"scproxyWriteLimit\",\"dockerOption\":\"scproxy-write-limit\"},{\"actionOption\":\"sePort\",\"dockerOption\":\"se-port\"},{\"actionOption\":\"sharedTunnel\",\"dockerOption\":\"shared-tunnel\",\"flag\":true},{\"actionOption\":\"tunnelCainfo\",\"dockerOption\":\"tunnel-cainfo\"},{\"actionOption\":\"tunnelCapath\",\"dockerOption\":\"tunnel-capath\"},{\"actionOption\":\"tunnelCert\",\"dockerOption\":\"tunnel-cert\"},{\"actionOption\":\"tunnelDomains\",\"dockerOption\":\"tunnel-domains\"},{\"actionOption\":\"tunnelIdentifier\",\"dockerOption\":\"tunnel-identifier\"},{\"actionOption\":\"verbose\",\"dockerOption\":\"verbose\",\"flag\":true}]");
+module.exports = JSON.parse("[{\"actionOption\":\"username\",\"dockerOption\":\"user\",\"required\":true},{\"actionOption\":\"accessKey\",\"dockerOption\":\"api-key\",\"required\":true},{\"actionOption\":\"cainfo\",\"dockerOption\":\"cainfo\"},{\"actionOption\":\"configFile\",\"dockerOption\":\"config-file\",\"relativePath\":true},{\"actionOption\":\"directDomains\",\"dockerOption\":\"direct-domains\"},{\"actionOption\":\"dns\",\"dockerOption\":\"dns\"},{\"actionOption\":\"fastFailRegexps\",\"dockerOption\":\"fast-fail-regexps\"},{\"actionOption\":\"maxLogsize\",\"dockerOption\":\"max-logsize\"},{\"actionOption\":\"metricsAddress\",\"dockerOption\":\"status-address\"},{\"actionOption\":\"statusAddress\",\"dockerOption\":\"status-address\"},{\"actionOption\":\"noAutodetect\",\"dockerOption\":\"no-autodetect\",\"flag\":true},{\"actionOption\":\"noRemoveCollidingTunnels\",\"dockerOption\":\"no-remove-colliding-tunnels\",\"flag\":true},{\"actionOption\":\"noSSLBumpDomains\",\"dockerOption\":\"no-ssl-bump-domains\"},{\"actionOption\":\"pac\",\"dockerOption\":\"pac\"},{\"actionOption\":\"proxy\",\"dockerOption\":\"proxy\"},{\"actionOption\":\"proxyTunnel\",\"dockerOption\":\"proxy-tunnel\",\"flag\":true},{\"actionOption\":\"proxyUserpwd\",\"dockerOption\":\"proxy-userpwd\"},{\"actionOption\":\"region\",\"dockerOption\":\"region\"},{\"actionOption\":\"scproxyPort\",\"dockerOption\":\"scproxy-port\"},{\"actionOption\":\"sePort\",\"dockerOption\":\"se-port\"},{\"actionOption\":\"sharedTunnel\",\"dockerOption\":\"shared-tunnel\",\"flag\":true},{\"actionOption\":\"tunnelCainfo\",\"dockerOption\":\"tunnel-cainfo\"},{\"actionOption\":\"tunnelDomains\",\"dockerOption\":\"tunnel-domains\"},{\"actionOption\":\"tunnelIdentifier\",\"dockerOption\":\"tunnel-identifier\"},{\"actionOption\":\"tunnelName\",\"dockerOption\":\"tunnel-name\"},{\"actionOption\":\"tunnelPool\",\"dockerOption\":\"tunnel-pool\",\"flag\":true},{\"actionOption\":\"verbose\",\"dockerOption\":\"verbose\",\"flag\":true}]");
 
 /***/ }),
 

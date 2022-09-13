@@ -6,13 +6,25 @@ jobs:
         runs-on: ubuntu-latest
         name: Action Test
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 16
 
             - name: "Install Dependencies"
               run: npm install
 
             - name: "Build the package"
               run: npm run build
+
+            - name: "Check if new build was checked in"
+              run: |
+                if [ $(git status --porcelain | wc -l) -gt 0 ] ; then
+                  echo "Found uncommited changes. Did you forget to check in the dist/ folder?"
+                  git status --porcelain
+                  exit 1
+                fi
 
             - uses: ./
               with:
