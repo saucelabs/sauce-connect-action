@@ -10,7 +10,6 @@ import {stopSc} from './stop-sc'
 import {wait} from './wait'
 
 const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
-const PID_FILE = '/srv/sauce-connect.pid'
 const LOG_FILE = join(tmp, 'sauce-connect.log')
 const READY_FILE = join(tmp, 'sc.ready')
 
@@ -26,7 +25,6 @@ const optionMappings: OptionMapping[] = optionMappingJson
 function buildOptions(): string[] {
     const params = [
         `--logfile=${LOG_FILE}`,
-        `--pidfile=${PID_FILE}`,
         `--extra-info={"runner": "github-action"}`,
         `--readyfile=${READY_FILE}`
     ]
