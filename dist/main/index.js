@@ -5250,14 +5250,12 @@ const option_mapping_json_1 = __importDefault(__webpack_require__(189));
 const stop_sc_1 = __webpack_require__(708);
 const wait_1 = __webpack_require__(259);
 const tmp = fs_1.mkdtempSync(path_1.join(os_1.tmpdir(), `sauce-connect-action`));
-const PID_FILE = '/srv/sauce-connect.pid';
 const LOG_FILE = path_1.join(tmp, 'sauce-connect.log');
 const READY_FILE = path_1.join(tmp, 'sc.ready');
 const optionMappings = option_mapping_json_1.default;
 function buildOptions() {
     const params = [
         `--logfile=${LOG_FILE}`,
-        `--pidfile=${PID_FILE}`,
         `--extra-info={"runner": "github-action"}`,
         `--readyfile=${READY_FILE}`
     ];
