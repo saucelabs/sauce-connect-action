@@ -84,7 +84,7 @@ jobs:
         name: Action Test
         steps:
             # ...
-            - uses: saucelabs/sauce-connect-action@v2
+            - uses: saucelabs/sauce-connect-action@v3
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
@@ -92,7 +92,7 @@ jobs:
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
 
-            - uses: actions/upload-artifact@v2
+            - uses: actions/upload-artifact@v3
               if: ${{ failure() }}
               with:
                 name: sauce-connect-log
