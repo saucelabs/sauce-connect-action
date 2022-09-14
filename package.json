@@ -47,7 +47,7 @@
     "webdriverio": "^6.4.6"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/exec": "^1.0.4",
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1"
