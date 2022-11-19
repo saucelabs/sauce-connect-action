@@ -5281,45 +5281,35 @@ function buildOptions() {
 }
 function startSc() {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            const cmd = yield io_1.which('sc');
-            const args = buildOptions();
-            console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
-            const child = child_process_1.spawn(cmd, args, {
-                stdio: 'ignore',
-                detached: true
-            });
-            child.unref();
-            let errorOccurred = false;
-            try {
-                yield wait_1.wait(path_1.dirname(READY_FILE));
-                console_1.info('SC ready');
-                resolve(String(child.pid));
+        const cmd = yield io_1.which('sc');
+        const args = buildOptions();
+        console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
+        const child = child_process_1.spawn(cmd, args, {
+            stdio: 'ignore',
+            detached: true
+        });
+        child.unref();
+        let errorOccurred = false;
+        try {
+            yield wait_1.wait(path_1.dirname(READY_FILE));
+            console_1.info('SC ready');
+            return String(child.pid);
+        }
+        catch (e) {
+            errorOccurred = true;
+            if (child.pid) {
+                yield stop_sc_1.stopSc(String(child.pid));
             }
-            catch (e) {
-                errorOccurred = true;
-                if (child.pid) {
-                    yield stop_sc_1.stopSc(String(child.pid));
-                }
-                throw e;
+            throw e;
+        }
+        finally {
+            if (errorOccurred || core_1.isDebug()) {
+                const log = fs_1.readFileSync(LOG_FILE, {
+                    encoding: 'utf-8'
+                });
+                (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
             }
-            finally {
-                if (errorOccurred || core_1.isDebug()) {
-                    try {
-                        const log = fs_1.readFileSync(LOG_FILE, {
-                            encoding: 'utf-8'
-                        });
-                        (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
-                        if (errorOccurred) {
-                            reject(new Error(`Could not start sauce connect`));
-                        }
-                    }
-                    catch (error) {
-                        reject(error);
-                    }
-                }
-            }
-        }));
+        }
     });
 }
 exports.startSc = startSc;

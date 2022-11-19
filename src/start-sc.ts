@@ -51,46 +51,34 @@ function buildOptions(): string[] {
 }
 
 export async function startSc(): Promise<string> {
-    return new Promise(async (resolve, reject) => {
-        const cmd = await which('sc')
-        const args = buildOptions()
+    const cmd = await which('sc')
+    const args = buildOptions()
 
-        info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`)
-        const child = spawn(cmd, args, {
-            stdio: 'ignore',
-            detached: true
-        })
-        child.unref()
-
-        let errorOccurred = false
-        try {
-            await wait(dirname(READY_FILE))
-            info('SC ready')
-            resolve(String(child.pid))
-        } catch (e) {
-            errorOccurred = true
-            if (child.pid) {
-                await stopSc(String(child.pid))
-            }
-            throw e
-        } finally {
-            if (errorOccurred || isDebug()) {
-                try {
-                    const log = readFileSync(LOG_FILE, {
-                        encoding: 'utf-8'
-                    })
-
-                    ;(errorOccurred ? warning : debug)(
-                        `Sauce connect log: ${log}`
-                    )
-
-                    if (errorOccurred) {
-                        reject(new Error(`Could not start sauce connect`))
-                    }
-                } catch (error) {
-                    reject(error)
-                }
-            }
-        }
+    info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`)
+    const child = spawn(cmd, args, {
+        stdio: 'ignore',
+        detached: true
     })
+    child.unref()
+
+    let errorOccurred = false
+    try {
+        await wait(dirname(READY_FILE))
+        info('SC ready')
+        return String(child.pid)
+    } catch (e) {
+        errorOccurred = true
+        if (child.pid) {
+            await stopSc(String(child.pid))
+        }
+        throw e
+    } finally {
+        if (errorOccurred || isDebug()) {
+            const log = readFileSync(LOG_FILE, {
+                encoding: 'utf-8'
+            })
+
+            ;(errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
+        }
+    }
 }
