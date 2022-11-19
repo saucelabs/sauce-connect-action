@@ -5348,7 +5348,12 @@ const exec_1 = __webpack_require__(514);
 function stopSc(pid) {
     return __awaiter(this, void 0, void 0, function* () {
         core_1.info(`Trying to stop sc with pid ${pid}`);
-        yield exec_1.exec(`kill ${pid}`);
+        try {
+            yield exec_1.exec(`kill ${pid}`);
+        }
+        catch (e) {
+            core_1.warning(`Failed to stop sc (${e instanceof Error ? e.message : e})). It might already have stopped`);
+        }
         core_1.info('Done');
     });
 }
