@@ -5281,45 +5281,35 @@ function buildOptions() {
 }
 function startSc() {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            const cmd = yield io_1.which('sc');
-            const args = buildOptions();
-            console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
-            const child = child_process_1.spawn(cmd, args, {
-                stdio: 'ignore',
-                detached: true
-            });
-            child.unref();
-            let errorOccurred = false;
-            try {
-                yield wait_1.wait(path_1.dirname(READY_FILE));
-                console_1.info('SC ready');
-                resolve(String(child.pid));
+        const cmd = yield io_1.which('sc');
+        const args = buildOptions();
+        console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
+        const child = child_process_1.spawn(cmd, args, {
+            stdio: 'ignore',
+            detached: true
+        });
+        child.unref();
+        let errorOccurred = false;
+        try {
+            yield wait_1.wait(path_1.dirname(READY_FILE));
+            console_1.info('SC ready');
+            return String(child.pid);
+        }
+        catch (e) {
+            errorOccurred = true;
+            if (child.pid) {
+                yield stop_sc_1.stopSc(String(child.pid));
             }
-            catch (e) {
-                errorOccurred = true;
-                if (child.pid) {
-                    yield stop_sc_1.stopSc(String(child.pid));
-                }
-                throw e;
+            throw e;
+        }
+        finally {
+            if (errorOccurred || core_1.isDebug()) {
+                const log = fs_1.readFileSync(LOG_FILE, {
+                    encoding: 'utf-8'
+                });
+                (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
             }
-            finally {
-                if (errorOccurred || core_1.isDebug()) {
-                    try {
-                        const log = fs_1.readFileSync(LOG_FILE, {
-                            encoding: 'utf-8'
-                        });
-                        (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
-                        if (errorOccurred) {
-                            reject(new Error(`Could not start sauce connect`));
-                        }
-                    }
-                    catch (error) {
-                        reject(error);
-                    }
-                }
-            }
-        }));
+        }
     });
 }
 exports.startSc = startSc;
@@ -5341,14 +5331,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stopSc = void 0;
 const core_1 = __webpack_require__(186);
-const exec_1 = __webpack_require__(514);
+const process_1 = __importDefault(__webpack_require__(765));
 function stopSc(pid) {
     return __awaiter(this, void 0, void 0, function* () {
         core_1.info(`Trying to stop sc with pid ${pid}`);
-        yield exec_1.exec(`kill ${pid}`);
+        try {
+            process_1.default.kill(parseInt(pid));
+        }
+        catch (e) {
+            core_1.warning(`Failed to stop sc (${e instanceof Error ? e.message : e})). It might already have stopped`);
+        }
         core_1.info('Done');
     });
 }
@@ -5490,6 +5488,14 @@ module.exports = require("os");;
 
 "use strict";
 module.exports = require("path");;
+
+/***/ }),
+
+/***/ 765:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");;
 
 /***/ }),
 
