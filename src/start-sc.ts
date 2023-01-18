@@ -24,7 +24,7 @@ const optionMappings: OptionMapping[] = optionMappingJson
 
 function buildOptions(): string[] {
     const params = [
-        `--logfile=${LOG_FILE}`,
+        
         `--extra-info={"runner": "github-action"}`,
         `--readyfile=${READY_FILE}`
     ]
@@ -40,7 +40,9 @@ function buildOptions(): string[] {
 
         if (input === '') {
             // user input nothing for this option
-        } else if (optionMapping.flag) {
+        } else if (input === '' && optionMapping.actionOption === 'logFile') {
+            params.push(`--logfile=${LOG_FILE}`)
+        }else if (optionMapping.flag) {
             // for boolean flag options like `--tunnel-pool`
             params.push(`--${optionMapping.scOption}`)
         } else {

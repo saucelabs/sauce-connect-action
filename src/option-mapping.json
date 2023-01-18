@@ -18,6 +18,10 @@
         "scOption": "config-file"
     },
     {
+        "actionOption": "logFile",
+        "scOption": "log-file"
+    },
+    {
         "actionOption": "directDomains",
         "scOption": "direct-domains"
     },
