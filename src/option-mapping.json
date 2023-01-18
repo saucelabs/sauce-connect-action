@@ -19,7 +19,7 @@
     },
     {
         "actionOption": "logFile",
-        "scOption": "log-file"
+        "scOption": "logfile"
     },
     {
         "actionOption": "directDomains",
