@@ -43,9 +43,7 @@ function buildOptions(): string[] {
             required: optionMapping.required
         })
 
-        if (input === '') {
-            // user input nothing for this option
-        } else if (input === '' && optionMapping.actionOption === 'logFile') {
+        if (input === '' && optionMapping.actionOption === 'logFile') {
             params.push(`--logfile=${LOG_FILE}`)
         }else if (optionMapping.flag) {
             // for boolean flag options like `--tunnel-pool`
