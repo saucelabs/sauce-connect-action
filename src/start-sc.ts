@@ -9,7 +9,7 @@ import optionMappingJson from './option-mapping.json'
 import {stopSc} from './stop-sc'
 import {wait} from './wait'
 
-const tmp = '';
+let tmp = '';
 try {
     tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
 } catch (e) {
