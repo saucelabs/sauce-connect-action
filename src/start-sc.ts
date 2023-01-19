@@ -15,7 +15,7 @@ try {
 } catch (e) {
     console.error(`Error creating tmp directory for log file: ${e}`);
 }
-console.log(`Temp Director Exists? - ${existsSync(tmp)}`);
+info(`Temp Director Exists? - ${existsSync(tmp)}`);
 
 const LOG_FILE = join(tmp, 'sauce-connect.log')
 const READY_FILE = join(tmp, 'sc.ready')
