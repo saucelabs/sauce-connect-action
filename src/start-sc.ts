@@ -9,8 +9,9 @@ import optionMappingJson from './option-mapping.json'
 import {stopSc} from './stop-sc'
 import {wait} from './wait'
 
+const tmp = '';
 try {
-    const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+    tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
 } catch (e) {
     console.error(`Error creating tmp directory for log file: ${e}`);
 }
