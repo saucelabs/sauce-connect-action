@@ -10,15 +10,8 @@ import {stopSc} from './stop-sc'
 import {wait} from './wait'
 
 let tmp = '';
-try {
-    tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
-} catch (e) {
-    console.error(`Error creating tmp directory for log file: ${e}`);
-}
-info(`Temp Director Exists? - ${existsSync(tmp)}`);
-
-const LOG_FILE = join(tmp, 'sauce-connect.log')
-const READY_FILE = join(tmp, 'sc.ready')
+let LOG_FILE = '';
+let READY_FILE = '';
 
 type OptionMapping = {
     actionOption: string
@@ -57,6 +50,16 @@ function buildOptions(): string[] {
 }
 
 export async function startSc(): Promise<string> {
+    try {
+        tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+    } catch (e) {
+        console.error(`Error creating tmp directory for log file: ${e}`);
+    }
+    info(`Temp Director Exists? - ${existsSync(tmp)}`);
+    
+    LOG_FILE = join(tmp, 'sauce-connect.log')
+    READY_FILE = join(tmp, 'sc.ready')
+    
     const cmd = await which('sc')
     const args = buildOptions()
 
