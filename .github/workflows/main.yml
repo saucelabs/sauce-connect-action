@@ -33,7 +33,7 @@ jobs:
                 tunnelName: github-action-tunnel
                 tunnelPool: true
                 configFile: ${{ github.workspace }}/sc-configuration/config.yaml
-                #logFile: "-"
+                logFile: "-"    
 
             - name: "Run Test"
               run: npm run test

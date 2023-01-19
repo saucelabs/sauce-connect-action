@@ -56,7 +56,6 @@ export async function startSc(): Promise<string> {
     } catch (e) {
         console.error(`Error creating tmp directory for log file: ${e}`);
     }
-    info(`Temp Directory Exists? - ${existsSync(tmp)}`);
     
     LOG_FILE = join(tmp, 'sauce-connect.log')
     READY_FILE = join(tmp, 'sc.ready')
