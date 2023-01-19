@@ -2,7 +2,7 @@ import {debug, getInput, isDebug, warning} from '@actions/core'
 import {which} from '@actions/io'
 import {spawn} from 'child_process'
 import {info} from 'console'
-import {mkdtempSync, readFileSync} from 'fs'
+import {mkdtempSync, readFileSync, existsSync} from 'fs'
 import {tmpdir} from 'os'
 import {dirname, join} from 'path'
 import optionMappingJson from './option-mapping.json'
@@ -15,6 +15,7 @@ try {
 } catch (e) {
     console.error(`Error creating tmp directory for log file: ${e}`);
 }
+console.log(`Temp Director Exists? - ${existsSync(tmp)}`);
 
 const LOG_FILE = join(tmp, 'sauce-connect.log')
 const READY_FILE = join(tmp, 'sc.ready')
