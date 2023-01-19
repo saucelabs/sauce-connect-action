@@ -52,6 +52,7 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `configFile`
 - `directDomains`
 - `fastFailRegexps`
+- `logFile`
 - `metricsAddress`
 - `noAutodetect`
 - `noSSLBumpDomains`
