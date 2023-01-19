@@ -9,7 +9,12 @@ import optionMappingJson from './option-mapping.json'
 import {stopSc} from './stop-sc'
 import {wait} from './wait'
 
-const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+try {
+    const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+} catch (e) {
+    console.error(`Error creating tmp directory for log file: ${e}`);
+}
+
 const LOG_FILE = join(tmp, 'sauce-connect.log')
 const READY_FILE = join(tmp, 'sc.ready')
 
@@ -24,7 +29,6 @@ const optionMappings: OptionMapping[] = optionMappingJson
 
 function buildOptions(): string[] {
     const params = [
-        
         `--extra-info={"runner": "github-action"}`,
         `--readyfile=${READY_FILE}`
     ]
