@@ -42,7 +42,7 @@ function buildOptions(): string[] {
         }else if (optionMapping.flag) {
             // for boolean flag options like `--tunnel-pool`
             params.push(`--${optionMapping.scOption}`)
-        } else {
+        } else if(input !== '') {
             params.push(`--${optionMapping.scOption}=${input}`)
         }
     }
