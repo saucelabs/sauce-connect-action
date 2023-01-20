@@ -1,13 +1,13 @@
-import {debug, getInput, isDebug, warning} from '@actions/core'
-import {which} from '@actions/io'
-import {spawn} from 'child_process'
-import {info} from 'console'
-import {mkdtempSync, readFileSync} from 'fs'
-import {tmpdir} from 'os'
-import {dirname, join} from 'path'
+import { debug, getInput, isDebug, warning } from '@actions/core'
+import { which } from '@actions/io'
+import { spawn } from 'child_process'
+import { info } from 'console'
+import { mkdtempSync, readFileSync } from 'fs'
+import { tmpdir } from 'os'
+import { dirname, join } from 'path'
 import optionMappingJson from './option-mapping.json'
-import {stopSc} from './stop-sc'
-import {wait} from './wait'
+import { stopSc } from './stop-sc'
+import { wait } from './wait'
 
 const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
 const LOG_FILE = join(tmp, 'sauce-connect.log')
@@ -74,11 +74,19 @@ export async function startSc(): Promise<string> {
         throw e
     } finally {
         if (errorOccurred || isDebug()) {
-            const log = readFileSync(LOG_FILE, {
-                encoding: 'utf-8'
-            })
+            try {
+                const log = readFileSync(LOG_FILE, {
+                    encoding: 'utf-8'
+                })
 
-            ;(errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
+                    ; (errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
+            } catch (e) {
+                // error outputting the log file, try the command line
+                ; (errorOccurred ? warning : debug)(`Unable to output log file: ${e}`)
+                    ; (errorOccurred ? warning : debug)(`Sauce connect stdout: ${child.stdout.toString()}`)
+                    ; (errorOccurred ? warning : debug)(`Sauce connect stderr: ${child.stderr.toString()}`)
+            }
         }
+
     }
 }
