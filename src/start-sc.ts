@@ -79,9 +79,9 @@ export async function startSc(): Promise<string> {
                     ; (errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
             } catch (e) {
                 // error outputting the log file, try the command line
-                (errorOccurred ? warning : debug)(`Unable to output log file: ${e}`)
-                    (errorOccurred ? warning : debug)(`Sauce connect stdout: ${child.stdout.toString()}`)
-                    (errorOccurred ? warning : debug)(`Sauce connect stderr: ${child.stderr.toString()}`)
+                warning(`Unable to output log file: ${e}`)
+                warning(`Sauce connect stdout: ${child.stdout!.toString()}`)
+                warning(`Sauce connect stderr: ${child.stderr!.toString()}`)
             }
         }
 
