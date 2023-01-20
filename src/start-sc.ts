@@ -1,4 +1,4 @@
-import {debug, getInput, isDebug, warning} from '@actions/core'
+import {debug, getInput, isDebug, warning, error} from '@actions/core'
 import {which} from '@actions/io'
 import {spawn} from 'child_process'
 import {info} from 'console'
@@ -52,13 +52,13 @@ function buildOptions(): string[] {
 export async function startSc(): Promise<string> {
     try {
         tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
-        openSync(join(tmp, 'sauce-connect.log'), 'w');
+        LOG_FILE = join(tmp, 'sauce-connect.log')
+        READY_FILE = join(tmp, 'sc.ready')
+        openSync(LOG_FILE, 'w');
     } catch (e) {
-        console.error(`Error creating tmp directory for log file: ${e}`);
+        error(`Error creating tmp directory for log file: ${e}`);
+        throw(e);
     }
-    
-    LOG_FILE = join(tmp, 'sauce-connect.log')
-    READY_FILE = join(tmp, 'sc.ready')
     
     const cmd = await which('sc')
     const args = buildOptions()
