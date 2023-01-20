@@ -5304,10 +5304,16 @@ function startSc() {
         }
         finally {
             if (errorOccurred || core_1.isDebug()) {
-                const log = fs_1.readFileSync(LOG_FILE, {
-                    encoding: 'utf-8'
-                });
-                (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
+                try {
+                    const log = fs_1.readFileSync(LOG_FILE, { encoding: 'utf-8' });
+                    (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
+                }
+                catch (e) {
+                    // error outputting the log file, try the command line
+                    core_1.warning(`Unable to output log file: ${e}`);
+                    core_1.warning(`Sauce connect stdout: ${child.stdout.toString()}`);
+                    core_1.warning(`Sauce connect stderr: ${child.stderr.toString()}`);
+                }
             }
         }
     });
@@ -5372,13 +5378,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.wait = void 0;
 const fs_1 = __webpack_require__(747);
+const timeoutSeconds = 60;
 function wait(dir) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
                 watcher.close();
-                reject(new Error('timeout: SC was not ready even after we wait 45 secs'));
-            }, 45 * 1000);
+                reject(new Error(`timeout: SC was not ready even after we wait ${timeoutSeconds} secs`));
+            }, timeoutSeconds * 1000);
             const watcher = fs_1.watch(dir, (eventType, filename) => {
                 if (filename !== 'sc.ready') {
                     return;
