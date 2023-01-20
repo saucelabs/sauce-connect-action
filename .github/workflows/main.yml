@@ -32,8 +32,7 @@ jobs:
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                 tunnelName: github-action-tunnel
                 tunnelPool: true
-                configFile: ${{ github.workspace }}/sc-configuration/config.yaml
-                logFile: "-"    
+                configFile: ${{ github.workspace }}/sc-configuration/config.yaml    
 
             - name: "Run Test"
               run: npm run test
