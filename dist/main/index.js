@@ -5299,6 +5299,7 @@ function startSc() {
             errorOccurred = true;
             // store output in case log file can't be retrieved
             if (child.stdout) {
+                child.stdout.setEncoding('utf8');
                 stdout = child.stdout.toString();
             }
             if (child.pid) {
