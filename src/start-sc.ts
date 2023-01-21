@@ -84,7 +84,7 @@ export async function startSc(): Promise<string> {
             } catch (e) {
                 // error outputting the log file, try the command line
                 warning(`Unable to output log file: ${e}`)
-                warning('Sauce connect stdout: ' + stdout)
+                warning(`Sauce connect stdout: ${stdout}`)
             }
         }
 
