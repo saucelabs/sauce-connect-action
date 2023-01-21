@@ -5285,13 +5285,11 @@ function startSc() {
         const args = buildOptions();
         console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
         const child = child_process_1.spawn(cmd, args, {
-            stdio: 'ignore',
             detached: true
         });
         child.unref();
         let errorOccurred = false;
         let stdout = '';
-        let stderr = '';
         try {
             yield wait_1.wait(path_1.dirname(READY_FILE));
             console_1.info('SC ready');
@@ -5302,9 +5300,6 @@ function startSc() {
             // store output in case log file can't be retrieved
             if (child.stdout) {
                 stdout = child.stdout.toString();
-            }
-            if (child.stderr) {
-                stderr = child.stderr.toString();
             }
             if (child.pid) {
                 yield stop_sc_1.stopSc(String(child.pid));
@@ -5321,7 +5316,6 @@ function startSc() {
                     // error outputting the log file, try the command line
                     core_1.warning(`Unable to output log file: ${e}`);
                     core_1.warning(`Sauce connect stdout: ${stdout}`);
-                    core_1.warning(`Sauce connect stderr: ${stderr}`);
                 }
             }
         }
