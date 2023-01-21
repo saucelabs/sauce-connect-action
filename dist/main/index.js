@@ -5314,7 +5314,7 @@ function startSc() {
                 catch (e) {
                     // error outputting the log file, try the command line
                     core_1.warning(`Unable to output log file: ${e}`);
-                    core_1.warning('Sauce connect stdout: ' + stdout);
+                    core_1.warning(`Sauce connect stdout: ${stdout}`);
                 }
             }
         }
