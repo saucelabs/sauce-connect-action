@@ -61,19 +61,12 @@ export async function startSc(): Promise<string> {
     child.unref()
 
     let errorOccurred = false
-    let stdout = ''
     try {
         await wait(dirname(READY_FILE))
         info('SC ready')
         return String(child.pid)
     } catch (e) {
         errorOccurred = true
-
-        // store output in case log file can't be retrieved
-        if (child.stdout) {
-            child.stdout.setEncoding('utf8');
-            stdout = child.stdout.toString()
-        }
         if (child.pid) {
             await stopSc(String(child.pid))
         }
@@ -86,7 +79,14 @@ export async function startSc(): Promise<string> {
             } catch (e) {
                 // error outputting the log file, try the command line
                 warning(`Unable to output log file: ${e}`)
-                warning(`Sauce connect stdout: ${stdout}`)
+                let stdout = child.stdout.toString()
+                if (stdout) {
+                    warning(`Sauce connect stdout: ${stdout}`)
+                }
+                let stderr = child.stderr.toString()
+                if (stdout) {
+                    warning(`Sauce connect stderr: ${stderr}`)
+                }
             }
         }
 
