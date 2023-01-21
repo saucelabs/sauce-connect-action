@@ -54,24 +54,21 @@ export async function startSc(): Promise<string> {
     const cmd = await which('sc')
     const args = buildOptions()
     let stdout = ''
-    let isReady = false
 
     info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`)
     const child = spawn(cmd, args, {
         detached: true
     })
-    child.stdout.on('data',
-        function (data) {
-            if (!isReady) { stdout += data }
-        }
-    )
+
+    function updateStdout(data: string) { stdout += data }
+    child.stdout.on('data', updateStdout)
     child.unref()
 
     let errorOccurred = false
     try {
         await wait(dirname(READY_FILE))
         info('SC ready')
-        isReady = true
+        child.removeListener('data', updateStdout)
         return String(child.pid)
     } catch (e) {
         errorOccurred = true

@@ -5284,22 +5284,18 @@ function startSc() {
         const cmd = yield io_1.which('sc');
         const args = buildOptions();
         let stdout = '';
-        let isReady = false;
         console_1.info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`);
         const child = child_process_1.spawn(cmd, args, {
             detached: true
         });
-        child.stdout.on('data', function (data) {
-            if (!isReady) {
-                stdout += data;
-            }
-        });
+        function updateStdout(data) { stdout += data; }
+        child.stdout.on('data', updateStdout);
         child.unref();
         let errorOccurred = false;
         try {
             yield wait_1.wait(path_1.dirname(READY_FILE));
             console_1.info('SC ready');
-            isReady = true;
+            child.removeListener('data', updateStdout);
             return String(child.pid);
         }
         catch (e) {
