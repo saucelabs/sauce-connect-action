@@ -56,14 +56,12 @@ export async function startSc(): Promise<string> {
 
     info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`)
     const child = spawn(cmd, args, {
-        stdio: 'ignore',
         detached: true
     })
     child.unref()
 
     let errorOccurred = false
     let stdout = ''
-    let stderr = ''
     try {
         await wait(dirname(READY_FILE))
         info('SC ready')
@@ -74,9 +72,6 @@ export async function startSc(): Promise<string> {
         // store output in case log file can't be retrieved
         if (child.stdout) {
             stdout = child.stdout.toString()
-        }
-        if (child.stderr) {
-            stderr = child.stderr.toString()
         }
         if (child.pid) {
             await stopSc(String(child.pid))
@@ -91,7 +86,6 @@ export async function startSc(): Promise<string> {
                 // error outputting the log file, try the command line
                 warning(`Unable to output log file: ${e}`)
                 warning(`Sauce connect stdout: ${stdout}`)
-                warning(`Sauce connect stderr: ${stderr}`)
             }
         }
 
