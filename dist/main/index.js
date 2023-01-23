@@ -5312,7 +5312,7 @@ function startSc() {
                 }
                 catch (e2) {
                     core_1.warning(`Unable to access Sauce connect log file: ${e2}.
-                This could be cause by an error with the Sauce Connect or Github Action configuration that prevented Sauce Connect from starting up.
+                This could be caused by an error with the Sauce Connect or Github Action configuration that prevented Sauce Connect from starting up.
                 Please verify your configuration and ensure any referenced files are available.`);
                 }
             }
