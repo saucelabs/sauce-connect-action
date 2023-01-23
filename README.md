@@ -11,7 +11,8 @@ jobs:
         name: Action Test
         steps:
             # ...
-            - uses: saucelabs/sauce-connect-action@v2
+            - uses: actions/checkout@v3  # reference files in the current repository
+            - uses: saucelabs/sauce-connect-action@v2  # or use the latest version with @main
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
@@ -84,7 +85,8 @@ jobs:
         name: Action Test
         steps:
             # ...
-            - uses: saucelabs/sauce-connect-action@v3
+            - uses: actions/checkout@v3  # reference files in the current repository
+            - uses: saucelabs/sauce-connect-action@v2  # or use the latest version with @main
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
