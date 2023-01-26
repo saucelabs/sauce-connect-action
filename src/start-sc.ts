@@ -1,13 +1,13 @@
-import {debug, getInput, isDebug, warning} from '@actions/core'
-import {which} from '@actions/io'
-import {spawn} from 'child_process'
-import {info} from 'console'
-import {mkdtempSync, readFileSync} from 'fs'
-import {tmpdir} from 'os'
-import {dirname, join} from 'path'
+import { debug, getInput, isDebug, warning } from '@actions/core'
+import { which } from '@actions/io'
+import { spawn } from 'child_process'
+import { info } from 'console'
+import { mkdtempSync, readFileSync } from 'fs'
+import { tmpdir } from 'os'
+import { dirname, join } from 'path'
 import optionMappingJson from './option-mapping.json'
-import {stopSc} from './stop-sc'
-import {wait} from './wait'
+import { stopSc } from './stop-sc'
+import { wait } from './wait'
 
 const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
 const LOG_FILE = join(tmp, 'sauce-connect.log')
@@ -74,11 +74,16 @@ export async function startSc(): Promise<string> {
         throw e
     } finally {
         if (errorOccurred || isDebug()) {
-            const log = readFileSync(LOG_FILE, {
-                encoding: 'utf-8'
-            })
-
-            ;(errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
+            try {
+                const log = readFileSync(LOG_FILE, {
+                    encoding: 'utf-8'
+                })
+                    ; (errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
+            } catch (e2) {
+                warning(`Unable to access Sauce connect log file: ${e2}.
+                This could be caused by an error with the Sauce Connect or Github Action configuration that prevented Sauce Connect from starting up.
+                Please verify your configuration and ensure any referenced files are available.`)
+            }
         }
     }
 }

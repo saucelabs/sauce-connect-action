@@ -5304,10 +5304,17 @@ function startSc() {
         }
         finally {
             if (errorOccurred || core_1.isDebug()) {
-                const log = fs_1.readFileSync(LOG_FILE, {
-                    encoding: 'utf-8'
-                });
-                (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
+                try {
+                    const log = fs_1.readFileSync(LOG_FILE, {
+                        encoding: 'utf-8'
+                    });
+                    (errorOccurred ? core_1.warning : core_1.debug)(`Sauce connect log: ${log}`);
+                }
+                catch (e2) {
+                    core_1.warning(`Unable to access Sauce connect log file: ${e2}.
+                This could be caused by an error with the Sauce Connect or Github Action configuration that prevented Sauce Connect from starting up.
+                Please verify your configuration and ensure any referenced files are available.`);
+                }
             }
         }
     });
