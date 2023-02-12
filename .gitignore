@@ -5,3 +5,7 @@ __tests__/runner/*
 lib/**/*
 .nyc_output
 coverage
+
+# ignore local dev
+.secrets
+.env
