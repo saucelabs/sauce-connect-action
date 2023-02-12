@@ -49,18 +49,17 @@ Do not retry if this amount of minutes has passed since starting. (default: "10"
 
 Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html) for each option documentation.
 
-- `cainfo`
-- `configFile`
+- [cainfo](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--cainfo)
+- [configFile](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--config-file)
 - `directDomains`
 - `fastFailRegexps`
-- `metricsAddress`
 - `noAutodetect`
 - `noSSLBumpDomains`
 - `pac`
 - `proxy`
 - `proxyTunnel`
 - `proxyUserpwd`
-- `region`
+- [region](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--region)
 - `scproxyPort`
 - `sePort`
 - `sharedTunnel`
@@ -73,10 +72,10 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 
 ## Sauce Connect Proxy log
 
-Sometimes, it's beneficial to have an access to Sauce Connect Proxy log for debugging or for an audit.
+Sometimes, it's beneficial to access the Sauce Connect Proxy log for debugging or an audit.
 
 It can be done with [upload-artifact](https://github.com/actions/upload-artifact) GitHub Action.
-Optionally, a failure condition may be specified in order to store the log only in case of a failure.
+Optionally, a failure condition may be specified to store the log only in case of a failure.
 
 ```yaml
 jobs:
