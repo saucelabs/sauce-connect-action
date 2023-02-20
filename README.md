@@ -51,8 +51,8 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 
 - [cainfo](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--cainfo)
 - [configFile](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--config-file)
-- `directDomains`
-- `fastFailRegexps`
+- [directDomains](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--direct-domains)
+- [fastFailRegexps](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--fast-fail-regexps)
 - `noAutodetect`
 - `noSSLBumpDomains`
 - `pac`
