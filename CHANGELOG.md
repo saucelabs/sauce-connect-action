@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - update to Sauce Connect `v4.9.0`
+- resolves #61
 
 ## [2.3.2] - 2023-01-26
 ### Changed

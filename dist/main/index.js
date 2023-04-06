@@ -5189,6 +5189,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __webpack_require__(186);
 const installer_1 = __webpack_require__(574);
 const start_sc_1 = __webpack_require__(820);
+const fs_1 = __webpack_require__(747);
 const retryDelays = [1, 1, 1, 2, 3, 4, 5, 10, 20, 40, 60].map(a => a * 1000);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -5199,7 +5200,10 @@ function run() {
         for (let i = 0;; i++) {
             try {
                 const pid = yield start_sc_1.startSc();
-                core_1.saveState('scPid', pid);
+                const githubState = process.env.GITHUB_STATE || '/tmp/github_state';
+                fs_1.appendFileSync(githubState, `scPid=${pid}`, {
+                    encoding: 'utf8'
+                });
                 return;
             }
             catch (e) {

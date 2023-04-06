@@ -1,6 +1,7 @@
-import {getInput, saveState, setFailed, warning} from '@actions/core'
+import {getInput, setFailed, warning} from '@actions/core'
 import {installSauceConnect} from './installer'
 import {startSc} from './start-sc'
+import {appendFileSync} from 'fs'
 
 const retryDelays = [1, 1, 1, 2, 3, 4, 5, 10, 20, 40, 60].map(a => a * 1000)
 
@@ -14,7 +15,10 @@ async function run(): Promise<void> {
     for (let i = 0; ; i++) {
         try {
             const pid = await startSc()
-            saveState('scPid', pid)
+            const githubState = process.env.GITHUB_STATE || '/tmp/github_state'
+            appendFileSync(githubState, `scPid=${pid}`, {
+                encoding: 'utf8'
+            })
             return
         } catch (e) {
             if (Date.now() - startTime >= retryTimeout) {
