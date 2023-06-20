@@ -45,7 +45,7 @@ Only an absolute path to the file is supported at the moment (i.e. must prepend 
 
 Do not retry if this amount of minutes has passed since starting. (default: "10")
 
-## Addiotional configuration
+## Additional configuration
 
 Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html) for each option documentation.
 
