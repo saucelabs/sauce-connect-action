@@ -39,7 +39,7 @@ Only an absolute path to the file is supported at the moment (i.e. must prepend 
 
 ### `scVersion`:
 
-(Optional) version of the saucelabs/sauce-connect docker image. Use the latest sauce-connect release by default (the current latest version is 4.8.2).
+(Optional) version of the saucelabs/sauce-connect docker image. Use the latest sauce-connect release by default (the current latest version is 4.9.2).
 
 ### `retryTimeout`:
 
