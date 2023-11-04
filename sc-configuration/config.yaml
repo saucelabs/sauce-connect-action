@@ -1,2 +1,4 @@
 ---
 fast-fail-regexps: ".*adobe.com"
+rest-url: "https://api.us-west-1.saucelabs.com/rest/v1"
+region: "us-west"
