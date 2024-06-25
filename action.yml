@@ -99,6 +99,6 @@ inputs:
         required: false
         default: '10'
 runs:
-    using: 'node16'
+    using: 'node20'
     main: 'dist/main/index.js'
     post: 'dist/post/index.js'
