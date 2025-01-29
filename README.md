@@ -58,6 +58,7 @@ Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sa
 - `pac`
 - `proxy`
 - `proxyTunnel`
+- `proxyLocalhost`
 - `proxyUserpwd`
 - [region](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--region)
 - `scproxyPort`
