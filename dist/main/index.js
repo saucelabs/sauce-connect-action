@@ -28910,6 +28910,7 @@ const option_mapping_json_1 = __importDefault(__nccwpck_require__(3377));
 const stop_sc_1 = __nccwpck_require__(4708);
 const wait_1 = __nccwpck_require__(5259);
 const tmp = (0, fs_1.mkdtempSync)((0, path_1.join)((0, os_1.tmpdir)(), `sauce-connect-action`));
+(0, core_1.exportVariable)('SAUCE_CONNECT_DIR_IN_HOST', tmp);
 const LOG_FILE = (0, path_1.join)(tmp, 'sauce-connect.log');
 const READY_FILE = (0, path_1.join)(tmp, 'sc.ready');
 const optionMappings = option_mapping_json_1.default;

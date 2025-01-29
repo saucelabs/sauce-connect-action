@@ -8,7 +8,7 @@ let browser
         key: process.env.SAUCE_ACCESS_KEY,
         capabilities: {
             browserName: 'chrome',
-            platformName: 'Windows 10',
+            platformName: 'Windows 12',
             browserVersion: 'latest',
             'sauce:options': {
                 tunnelName: 'github-action-tunnel',

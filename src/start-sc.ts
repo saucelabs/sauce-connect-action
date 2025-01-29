@@ -1,4 +1,4 @@
-import { debug, getInput, isDebug, warning } from '@actions/core'
+import { debug, getInput, isDebug, warning, exportVariable } from '@actions/core'
 import { which } from '@actions/io'
 import { spawn } from 'child_process'
 import { info } from 'console'
@@ -10,6 +10,7 @@ import { stopSc } from './stop-sc'
 import { wait } from './wait'
 
 const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+exportVariable('SAUCE_CONNECT_DIR_IN_HOST', tmp)
 const LOG_FILE = join(tmp, 'sauce-connect.log')
 const READY_FILE = join(tmp, 'sc.ready')
 
