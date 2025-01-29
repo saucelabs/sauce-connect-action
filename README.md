@@ -11,7 +11,7 @@ jobs:
         name: Action Test
         steps:
             # ...
-            - uses: actions/checkout@v3  # reference files in the current repository
+            - uses: actions/checkout@v4  # reference files in the current repository
             - uses: saucelabs/sauce-connect-action@v2
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
