@@ -93,7 +93,7 @@ jobs:
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               if: ${{ failure() }}
               with:
                 name: sauce-connect-log
