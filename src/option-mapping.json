@@ -69,6 +69,11 @@
         "flag": true
     },
     {
+        "actionOption": "proxyLocalhost",
+        "scOption": "proxy-localhost",
+        "flag": true
+    },
+    {
         "actionOption": "proxyUserpwd",
         "scOption": "proxy-userpwd"
     },
