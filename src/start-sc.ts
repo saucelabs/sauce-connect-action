@@ -1,90 +1,69 @@
-import { debug, getInput, isDebug, warning, exportVariable } from '@actions/core'
-import { which } from '@actions/io'
-import { spawn } from 'child_process'
-import { info } from 'console'
-import { mkdtempSync, readFileSync } from 'fs'
-import { tmpdir } from 'os'
-import { dirname, join } from 'path'
-import optionMappingJson from './option-mapping.json'
-import { stopSc } from './stop-sc'
-import { wait } from './wait'
+import * as actionsCore from '@actions/core'
+import {mkdtempSync, writeFileSync} from 'fs'
+import {tmpdir} from 'os'
+import {join} from 'path'
+import SauceLabs, {SauceConnectOptions, SauceLabsOptions} from 'saucelabs'
+import {SAUCE_CONNECT_CLI_PARAMS} from 'saucelabs/build/constants'
+import {Tail} from 'tail'
 
-const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
-exportVariable('SAUCE_CONNECT_DIR_IN_HOST', tmp)
-const LOG_FILE = join(tmp, 'sauce-connect.log')
-const READY_FILE = join(tmp, 'sc.ready')
+const DEFAULT_RUNNER_NAME = 'github-action'
+const DEFAULT_LOG_FILE = 'sauce-connect.log'
 
-type OptionMapping = {
-    actionOption: string
-    scOption: string
-    required?: boolean
-    relativePath?: boolean
-    flag?: boolean
-}
-const optionMappings: OptionMapping[] = optionMappingJson
+type CoreType = typeof actionsCore
 
-function buildOptions(): string[] {
-    const params = [
-        `--logfile=${LOG_FILE}`,
-        `--extra-info={"runner": "github-action"}`,
-        `--readyfile=${READY_FILE}`
-    ]
+export async function startSc(core: CoreType): Promise<string> {
+    const tmp = mkdtempSync(join(tmpdir(), `sauce-connect-action`))
+    const LOG_FILE = join(tmp, DEFAULT_LOG_FILE)
 
-    if (isDebug()) {
-        params.push('--verbose')
-    }
+    core.exportVariable('SAUCE_CONNECT_DIR_IN_HOST', tmp)
 
-    for (const optionMapping of optionMappings) {
-        const input = getInput(optionMapping.actionOption, {
-            required: optionMapping.required
-        })
-
-        if (input === '') {
-            // user input nothing for this option
-        } else if (optionMapping.flag) {
-            // for boolean flag options like `--tunnel-pool`
-            params.push(`--${optionMapping.scOption}`)
-        } else {
-            params.push(`--${optionMapping.scOption}=${input}`)
-        }
-    }
-    return params
-}
-
-export async function startSc(): Promise<string> {
-    const cmd = await which('sc')
-    const args = buildOptions()
-
-    info(`[command]${cmd} ${args.map(arg => `${arg}`).join(' ')}`)
-    const child = spawn(cmd, args, {
-        stdio: 'ignore',
-        detached: true
+    const slAPI = new SauceLabs({
+        user: core.getInput('user'),
+        key: core.getInput('accessKey'),
+        region: core.getInput('region') as SauceLabsOptions['region'],
+        proxy: core.getInput('proxySauce') || undefined
     })
-    child.unref()
 
-    let errorOccurred = false
+    const params: SauceConnectOptions = {
+        logger: core.info,
+        logLevel: core.isDebug() ? 'debug' : 'info',
+        logFile: LOG_FILE,
+        metadata: ''
+    }
+
+    const proxyValue = core.getInput('proxy')
+    if (proxyValue) {
+        params.scUpstreamProxy = proxyValue
+    }
+
+    for (const param of SAUCE_CONNECT_CLI_PARAMS) {
+        const name = param.name.replace(/-[a-z]/g, (r: string) =>
+            r.slice(1).toUpperCase()
+        )
+        const value = core.getInput(name)
+        if (value !== undefined && value !== '') {
+            // @ts-expect-error not sure how to make sure that the name is a valid key
+            params[name] = value
+        }
+    }
+
+    if (!params.metadata?.includes('runner=')) {
+        params.metadata = [params.metadata, `runner=${DEFAULT_RUNNER_NAME}`]
+            .filter(Boolean)
+            .join(',')
+    }
+
+    // Print logs
+    writeFileSync(LOG_FILE, '')
+    const tail = new Tail(LOG_FILE)
+    tail.on('line', core.info)
+
     try {
-        await wait(dirname(READY_FILE))
-        info('SC ready')
-        return String(child.pid)
-    } catch (e) {
-        errorOccurred = true
-        if (child.pid) {
-            await stopSc(String(child.pid))
-        }
-        throw e
+        const process = await slAPI.startSauceConnect(params)
+        return String(process.cp.pid)
+    } catch (err) {
+        throw err
     } finally {
-        if (errorOccurred || isDebug()) {
-            try {
-                const log = readFileSync(LOG_FILE, {
-                    encoding: 'utf-8'
-                })
-                    ; (errorOccurred ? warning : debug)(`Sauce connect log: ${log}`)
-            } catch (e2) {
-                warning(`Unable to access Sauce connect log file: ${e2}.
-                This could be caused by an error with the Sauce Connect or Github Action configuration that prevented Sauce Connect from starting up.
-                Please verify your configuration and ensure any referenced files are available.`)
-            }
-        }
+        tail.unwatch()
     }
 }
