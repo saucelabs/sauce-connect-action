@@ -1,2 +1,2 @@
 ---
-fast-fail-regexps: ".*adobe.com"
+deny-domains: ".*adobe.com"

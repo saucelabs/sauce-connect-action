@@ -18,7 +18,7 @@ export async function startSc(core: CoreType): Promise<string> {
     core.exportVariable('SAUCE_CONNECT_DIR_IN_HOST', tmp)
 
     const slAPI = new SauceLabs({
-        user: core.getInput('user'),
+        user: core.getInput('username'),
         key: core.getInput('accessKey'),
         region: core.getInput('region') as SauceLabsOptions['region'],
         proxy: core.getInput('proxySauce') || undefined
