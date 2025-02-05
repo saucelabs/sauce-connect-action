@@ -24,7 +24,7 @@
     "test": "run-p test:*",
     "test:run": "node ./test/test.js",
     "test:setup": "http-server ./test -p 8080 > /dev/null 2>&1 &",
-    "test:jest": "jest test/**/*.test.ts",
+    "test:jest": "jest test/.+\\.test\\.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "all": "npm run build && npm run format && npm run lint && npm run coverage"
   },
