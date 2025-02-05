@@ -5,6 +5,7 @@ import {join} from 'path'
 import SauceLabs, {SauceConnectOptions, SauceLabsOptions} from 'saucelabs'
 import {SAUCE_CONNECT_CLI_PARAMS} from 'saucelabs/build/constants'
 import {Tail} from 'tail'
+import {ChildProcess} from 'node:child_process'
 
 const DEFAULT_RUNNER_NAME = 'github-action'
 const DEFAULT_LOG_FILE = 'sauce-connect.log'
@@ -59,11 +60,22 @@ export async function startSc(core: CoreType): Promise<string> {
     tail.on('line', core.info)
 
     try {
-        const process = await slAPI.startSauceConnect(params)
-        return String(process.cp.pid)
+        const result = await slAPI.startSauceConnect(params)
+        detachSauceConnect(result.cp)
+        return String(result.cp.pid)
     } catch (err) {
         throw err
     } finally {
         tail.unwatch()
     }
+}
+
+function detachSauceConnect(cp: ChildProcess): void {
+    cp.unref()
+    cp.stderr?.unpipe()
+    cp.stderr?.destroy()
+    cp.stdout?.unpipe()
+    cp.stdout?.destroy()
+    cp.stdin?.end()
+    cp.stdin?.destroy()
 }

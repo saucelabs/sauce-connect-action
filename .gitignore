@@ -9,3 +9,6 @@ coverage
 # ignore local dev
 .secrets
 .env
+
+# Ignore sc-loader
+dist/main/sc-loader/**/*

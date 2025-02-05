@@ -49230,8 +49230,9 @@ function startSc(core) {
         const tail = new tail_1.Tail(LOG_FILE);
         tail.on('line', core.info);
         try {
-            const process = yield slAPI.startSauceConnect(params);
-            return String(process.cp.pid);
+            const result = yield slAPI.startSauceConnect(params);
+            detachSauceConnect(result.cp);
+            return String(result.cp.pid);
         }
         catch (err) {
             throw err;
@@ -49240,6 +49241,16 @@ function startSc(core) {
             tail.unwatch();
         }
     });
+}
+function detachSauceConnect(cp) {
+    var _a, _b, _c, _d, _e, _f;
+    cp.unref();
+    (_a = cp.stderr) === null || _a === void 0 ? void 0 : _a.unpipe();
+    (_b = cp.stderr) === null || _b === void 0 ? void 0 : _b.destroy();
+    (_c = cp.stdout) === null || _c === void 0 ? void 0 : _c.unpipe();
+    (_d = cp.stdout) === null || _d === void 0 ? void 0 : _d.destroy();
+    (_e = cp.stdin) === null || _e === void 0 ? void 0 : _e.end();
+    (_f = cp.stdin) === null || _f === void 0 ? void 0 : _f.destroy();
 }
 
 
