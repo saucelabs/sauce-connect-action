@@ -52,7 +52,7 @@ inputs:
         description: Username and password required to access the proxy configured with -p.
         required: false
     region:
-        description: Sets your Sauce Labs region data center such as us-west, eu-central, etc... For more information, please refer to https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#data-center-endpoints.
+        description: Sets your Sauce Labs region data center such as us-west, eu-central, etc... For more information, please refer to https://docs.saucelabs.com/basics/data-center-endpoints/ or https://github.com/saucelabs/node-saucelabs?tab=readme-ov-file#region.
         required: true
     restUrl:
         description: Sets your Sauce Labs regional data center REST API URL (e.g., EU-Central, US-West). We recommend to use `region` instead.
@@ -83,7 +83,7 @@ inputs:
         description: Assigns a name to a Sauce Connect Proxy tunnel. Same as tunnelIdentifier.
         required: true
     tunnelPool:
-        description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
+        description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
         required: false
     username:
         description: Sauce Labs user name.
