@@ -6,13 +6,13 @@ branding:
     icon: server
     color: red
 inputs:
-    username:
-        description: Sauce Labs user name.
-        required: true
+    apiAddress:
+        description: 'host:port for the status server used to expose client status.'
+        required: false
     accessKey:
         description: Sauce Labs API Key.
         required: true
-    cainfo:
+    cacertFile:
         description: CA certificate bundle to use for verifying REST connections. (default "/usr/local/etc/openssl/cert.pem")
         required: false
     configFile:
@@ -21,26 +21,20 @@ inputs:
     directDomains:
         description: Comma-separated list of domains that you want to relay directly through the internet instead of through the Sauce Connect Proxy tunnel.
         required: false
-    dns:
+    dnsServer:
         description: 'Use specified name server. To specify multiple servers, separate them with comma. Use IP addresses, optionally with a port number, the two separated by a colon. Example: --dns 8.8.8.8,8.8.4.4:53'
         required: false
-    fastFailRegexps:
+    denyDomains:
         description: Comma-separated list of regular expressions. Requests matching one of these will get dropped instantly and will not go through the tunnel.
         required: false
-    maxLogsize:
-        description: Rotate logfile after reaching <bytes> size. Disabled by default.
+    logLevel:
+        description: Specify log level.
+        required: false
+    logHttp:
+        description: HTTP request and response logging mode.
         required: false
     metricsAddress:
         description: '[DEPRECATED in 4.8.0] host:port for the status server used to expose client metrics.'
-        required: false
-    noAutodetect:
-        description: Disable the autodetection of proxy settings.
-        required: false
-    noRemoveCollidingTunnels:
-        description: Denotes a tunnel as part of a high availability tunnel pool. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
-        required: false
-    noSSLBumpDomains:
-        description: Comma-separated list of domains. Requests whose host matches one of these will not be SSL re-encrypted.
         required: false
     pac:
         description: Proxy autoconfiguration. Can be an http(s) or local file:// (absolute path only) URI.
@@ -48,32 +42,36 @@ inputs:
     proxy:
         description: Proxy host and port that Sauce Connect should use to connect to the Sauce Labs cloud.
         required: false
-    proxyTunnel:
+    proxyLocalhost:
+        description: Configure localhost access; allow, direct, deny
+        required: false
+    proxySauce:
         description: Use the proxy configured with -p for the tunnel connection.
         required: false
     proxyUserpwd:
         description: Username and password required to access the proxy configured with -p.
         required: false
-    restUrl:
-        description: Sets your Sauce Labs regional data center REST API URL (e.g., EU-Central, US-West). We recommend to use `region` instead.
-        required: false
     region:
         description: Sets your Sauce Labs region data center such as us-west, eu-central, etc... For more information, please refer to https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#data-center-endpoints.
+        required: true
+    restUrl:
+        description: Sets your Sauce Labs regional data center REST API URL (e.g., EU-Central, US-West). We recommend to use `region` instead.
         required: false
     scproxyPort:
         description: Port on which scproxy will be listening.
         required: false
+    scVersion:
+        description: Version of the saucelabs/sauce-connect docker image.
+        required: false
+        default: '5'
     sePort:
         description: Port on which Sauce Connect's Selenium relay will listen for requests. Selenium commands reaching Connect on this port will be relayed to Sauce Labs securely and reliably through Connect's tunnel (default 4445)
         required: false
-    sharedTunnel:
+    shared:
         description: Share the tunnels within the same organization.
         required: false
-    statusAddress:
-        description: 'host:port for the status server used to expose client status.'
-        required: false
-    tunnelCainfo:
-        description: CA certificate bundle to use for verifying tunnel connections. (default "/usr/local/etc/openssl/cert.pem")
+    tlsPassthroughDomains:
+        description: Comma-separated list of domains. Requests whose host matches one of these will not be SSL re-encrypted.
         required: false
     tunnelDomains:
         description: Inverse of '--direct-domains'. Only requests for domains in this list will be sent through the tunnel. Overrides '--direct-domains'.
@@ -83,21 +81,17 @@ inputs:
         required: false
     tunnelName:
         description: Assigns a name to a Sauce Connect Proxy tunnel. Same as tunnelIdentifier.
-        required: false
+        required: true
     tunnelPool:
         description: Launches a high availability tunnel pool along with the --tunnel-identifier flag. For more info, please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/high-availability/.
         required: false
-    verbose:
-        description: Enable verbose logging.
-        required: false
-    scVersion:
-        description: Version of the saucelabs/sauce-connect docker image.
-        required: false
-        default: '4.9.2'
+    username:
+        description: Sauce Labs user name.
+        required: true
     retryTimeout:
         description: Do not retry if this amount of minutes has passed since starting.
         required: false
-        default: '10'
+        default: '5'
 runs:
     using: 'node20'
     main: 'dist/main/index.js'

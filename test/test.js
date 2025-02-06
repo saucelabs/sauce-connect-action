@@ -23,13 +23,12 @@ let browser
     assert.equal(await body.getText(), 'Hello World!')
 
     await browser.deleteSession()
-})().then(
-    () => process.exit(0),
-    async (e) => {
-        console.error(e)
+})()
+    .then(() => process.exit(0))
+    .catch(async (err) => {
+        console.error(err)
         if (browser) {
             await browser.deleteSession()
         }
         process.exit(1)
-    }
-)
+    })

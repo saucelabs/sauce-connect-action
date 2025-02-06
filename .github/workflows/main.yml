@@ -32,8 +32,10 @@ jobs:
                 accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
                 tunnelName: github-action-tunnel
                 tunnelPool: true
-                proxyLocalhost: true
+                proxyLocalhost: 'allow'
+                region: 'us'
                 configFile: ${{ github.workspace }}/sc-configuration/config.yaml
+                retryTimeout: 1
 
             - name: "Run Test"
               run: npm run test

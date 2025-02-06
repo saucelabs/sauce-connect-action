@@ -100,3 +100,11 @@ jobs:
                 name: sauce-connect-log
                 path: ${{ env.SAUCE_CONNECT_DIR_IN_HOST }}/sauce-connect.log
 ```
+
+
+## Development
+
+Run locally
+```bash
+INPUT_REGION=us-west-1 INPUT_TUNNELNAME=sauce-connect-test INPUT_USERNAME=username INPUT_ACCESSKEY=accesskey node ./dist/main/index.js
+```
