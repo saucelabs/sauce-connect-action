@@ -78,6 +78,7 @@ jobs:
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+                  region: us
                   tunnelName: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
