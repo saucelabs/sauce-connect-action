@@ -23193,15 +23193,27 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
+var _http = _interopRequireDefault(__nccwpck_require__(8611));
 var _constants = __nccwpck_require__(1021);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class SauceConnectHealthCheck {
   async perform(apiAddress) {
-    const response = await fetch(`${apiAddress}/readyz`, {
-      signal: AbortSignal.timeout(_constants.SC_HEALTHCHECK_TIMEOUT)
+    return new Promise((resolve, reject) => {
+      const request = _http.default.get(`${apiAddress}/readyz`, {
+        timeout: _constants.SC_HEALTHCHECK_TIMEOUT
+      }, response => {
+        if (response.statusCode !== 200) {
+          reject(new Error(`response status code ${response.statusCode} != 200`));
+        } else {
+          resolve();
+        }
+      });
+      request.on('error', reject);
+      request.on('timeout', () => {
+        request.destroy();
+        reject(new Error('Request timed out'));
+      });
     });
-    if (response.status !== 200) {
-      throw new TypeError(`response status code ${response.status} != 200`);
-    }
   }
 }
 exports["default"] = SauceConnectHealthCheck;
@@ -23341,6 +23353,7 @@ class SauceConnectManager {
     this._readyTimeout = null;
   }
   waitForReady(apiAddress) {
+    let lastHealthcheckErr = null;
     apiAddress = this._parseApiAddress(apiAddress);
     return new Promise((resolve, reject) => {
       this.cp.stderr.on('data', data => {
@@ -23364,16 +23377,14 @@ class SauceConnectManager {
           clearTimeout(this._readyTimeout);
           resolve();
         }).catch(err => {
-          if (err.name !== 'TypeError') {
-            clearInterval(this._healthcheckInterval);
-            clearTimeout(this._readyTimeout);
-            reject(err);
-          }
+          lastHealthcheckErr = err;
         });
       }, _constants.SC_HEALTHCHECK_TIMEOUT);
       this._readyTimeout = setTimeout(() => {
+        var _lastHealthcheckErr, _lastHealthcheckErr2;
         clearInterval(this._healthcheckInterval);
-        reject(new Error('Timeout waiting for healthcheck endpoint'));
+        console.error(`Timeout waiting for healthcheck endpoint, err=${(_lastHealthcheckErr = lastHealthcheckErr) === null || _lastHealthcheckErr === void 0 ? void 0 : _lastHealthcheckErr.message}, code=${(_lastHealthcheckErr2 = lastHealthcheckErr) === null || _lastHealthcheckErr2 === void 0 ? void 0 : _lastHealthcheckErr2.code}`);
+        reject(lastHealthcheckErr || new Error('Timeout waiting for healthcheck endpoint'));
       }, _constants.SC_READY_TIMEOUT);
     });
   }
@@ -51293,7 +51304,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"swagger":"2.0","info":{"title":"test
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"name":"saucelabs","version":"9.0.1","author":"Sauce Labs, Inc.","description":"A wrapper around Sauce Labs REST API","homepage":"https://github.com/saucelabs/node-saucelabs","license":"Apache-2.0","repository":{"type":"git","url":"git://github.com/saucelabs/node-saucelabs.git"},"main":"./build/index","bin":{"sl":"./bin/sl"},"typings":"./build/index.d.ts","scripts":{"build":"run-s clean compile generate:typings","clean":"rm -rf ./build ./coverage","compile":"babel src -d build","generate:docs":"babel-node ./scripts/generate-docs","generate:typings":"babel-node ./scripts/generate-typings","prepublishOnly":"NODE_ENV=production run-s build generate:typings","release":"release-it --github.release","release:ci":"npm run release -- --ci --npm.skipChecks --no-git.requireCleanWorkingDir","release:patch":"npm run release -- patch","release:minor":"npm run release -- minor","release:major":"npm run release -- major","test":"run-s build test:*","test:lint":"eslint -c ./.eslintrc.js ./src/**/*.js ./tests/**/*.js","test:typings":"run-s test:typings:*","test:typings:setup":"mkdir -p ./tests/typings/node_modules/saucelabs && cp ./package.json ./tests/typings/node_modules/saucelabs && cp -r ./build ./tests/typings/node_modules/saucelabs","test:typings:run":"cd ./tests/typings && tsc --incremental","test:typings:cleanup":"rm -r ./tests/typings/node_modules","test:unit":"jest --config ./jest.config.js","test:e2e":"jest e2e --collectCoverage=false --testMatch \\"<rootDir>/e2e/**/*.test.js\\" --testPathIgnorePatterns \\"<rootDir>/tests\\"","watch":"npm run compile -- --watch","prepare":"husky install","lint-staged":"lint-staged"},"dependencies":{"change-case":"^4.1.2","compressing":"^1.10.0","form-data":"^4.0.0","got":"^11.8.6","hash.js":"^1.1.7","query-string":"^7.1.3","tunnel":"^0.0.6","yargs":"^17.2.1"},"devDependencies":{"@babel/cli":"^7.22.10","@babel/core":"^7.22.15","@babel/node":"^7.22.10","@babel/preset-env":"^7.22.15","@babel/register":"^7.15.3","babel-plugin-source-map-support":"^2.2.0","eslint":"^8.48.0","eslint-config-prettier":"^9.0.0","eslint-plugin-import":"^2.28.1","husky":"^8.0.3","jest":"^29.6.4","lint-staged":"^15.0.2","npm-run-all":"^4.1.5","prettier":"^2.6.2","release-it":"^16.1.5","rimraf":"^5.0.1","source-map-support":"^0.5.20","swagger-typescript-codegen":"^3.2.4","typescript":"^4.4.4"},"lint-staged":{"*.js":["eslint --fix","prettier --write"],"*.{json,md,yml,ts}":["prettier --write"]},"prettier":{"bracketSpacing":false,"singleQuote":true}}');
+module.exports = /*#__PURE__*/JSON.parse('{"name":"saucelabs","version":"9.0.2","author":"Sauce Labs, Inc.","description":"A wrapper around Sauce Labs REST API","homepage":"https://github.com/saucelabs/node-saucelabs","license":"Apache-2.0","repository":{"type":"git","url":"git://github.com/saucelabs/node-saucelabs.git"},"main":"./build/index","bin":{"sl":"./bin/sl"},"typings":"./build/index.d.ts","scripts":{"build":"run-s clean compile generate:typings","clean":"rm -rf ./build ./coverage","compile":"babel src -d build","generate:docs":"babel-node ./scripts/generate-docs","generate:typings":"babel-node ./scripts/generate-typings","prepublishOnly":"NODE_ENV=production run-s build generate:typings","release":"release-it --github.release","release:ci":"npm run release -- --ci --npm.skipChecks --no-git.requireCleanWorkingDir","release:patch":"npm run release -- patch","release:minor":"npm run release -- minor","release:major":"npm run release -- major","test":"run-s build test:*","test:lint":"eslint -c ./.eslintrc.js ./src/**/*.js ./tests/**/*.js","test:typings":"run-s test:typings:*","test:typings:setup":"mkdir -p ./tests/typings/node_modules/saucelabs && cp ./package.json ./tests/typings/node_modules/saucelabs && cp -r ./build ./tests/typings/node_modules/saucelabs","test:typings:run":"cd ./tests/typings && tsc --incremental","test:typings:cleanup":"rm -r ./tests/typings/node_modules","test:unit":"jest --config ./jest.config.js","test:e2e":"jest e2e --collectCoverage=false --testMatch \\"<rootDir>/e2e/**/*.test.js\\" --testPathIgnorePatterns \\"<rootDir>/tests\\"","watch":"npm run compile -- --watch","prepare":"husky install","lint-staged":"lint-staged"},"dependencies":{"change-case":"^4.1.2","compressing":"^1.10.0","form-data":"^4.0.0","got":"^11.8.6","hash.js":"^1.1.7","query-string":"^7.1.3","tunnel":"^0.0.6","yargs":"^17.2.1"},"devDependencies":{"@babel/cli":"^7.22.10","@babel/core":"^7.22.15","@babel/node":"^7.22.10","@babel/preset-env":"^7.22.15","@babel/register":"^7.15.3","babel-plugin-source-map-support":"^2.2.0","eslint":"^8.48.0","eslint-config-prettier":"^9.0.0","eslint-plugin-import":"^2.28.1","husky":"^8.0.3","jest":"^29.6.4","lint-staged":"^15.0.2","npm-run-all":"^4.1.5","prettier":"^2.6.2","release-it":"^16.1.5","rimraf":"^5.0.1","source-map-support":"^0.5.20","swagger-typescript-codegen":"^3.2.4","typescript":"^4.4.4"},"lint-staged":{"*.js":["eslint --fix","prettier --write"],"*.{json,md,yml,ts}":["prettier --write"]},"prettier":{"bracketSpacing":false,"singleQuote":true}}');
 
 /***/ })
 

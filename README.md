@@ -12,34 +12,43 @@ jobs:
         steps:
             # ...
             - uses: actions/checkout@v4  # reference files in the current repository
-            - uses: saucelabs/sauce-connect-action@v2
+            - uses: saucelabs/sauce-connect-action@v3
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
                   accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
+                  region: us
                   tunnelName: github-action-tunnel
                   configFile: ${{ github.workspace }}/sc-configuration/config.yaml
             # ...
 ```
 
+## Migration from v2 to v3
+
+Please refer to [Migrating from Sauce Connect Proxy 4](https://docs.saucelabs.com/secure-connections/sauce-connect-5/migrating/)
+
 ## Inputs
 
 ### `username`:
 
-**Required** Sauce Labs [user name](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/#--user).
+**Required** Sauce Labs [user name](https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/#username).
 
 ### `accessKey`:
 
-**Required** Sauce Labs [API Access Key](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/#--api-key).
+**Required** Sauce Labs [API Access Key](https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/#access-key).
+
+### `region`:
+
+**Required** Sauce Labs [region](https://github.com/saucelabs/node-saucelabs?tab=readme-ov-file#region).
 
 ### `configFile`:
 
-Sauce Connect Proxy [configuration file](https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/yaml-config/).
+Sauce Connect Proxy [configuration file](https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/configuration/).
 
 Only an absolute path to the file is supported at the moment (i.e. must prepend the relative path to the file in the repo with `github.workspace`, see the example above).
 
 ### `scVersion`:
 
-(Optional) version of the saucelabs/sauce-connect docker image. Use the latest sauce-connect release by default (the current latest version is 4.9.2).
+(Optional) version of the saucelabs/sauce-connect client. Use the latest sauce-connect release by default. Current latest version can be found in [the official documentation](https://docs.saucelabs.com/secure-connections/sauce-connect-5/installation/)
 
 ### `retryTimeout`:
 
@@ -47,29 +56,8 @@ Do not retry if this amount of minutes has passed since starting. (default: "10"
 
 ## Additional configuration
 
-Please refer to [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html) for each option documentation.
+Please refer to [action.yml](action.yml) or [Sauce Labs documentation](https://docs.saucelabs.com/dev/cli/sauce-connect-5/run/) for each option documentation.
 
-- [cainfo](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--cainfo)
-- [configFile](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--config-file)
-- [directDomains](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--direct-domains)
-- [fastFailRegexps](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--fast-fail-regexps)
-- `noAutodetect`
-- `noSSLBumpDomains`
-- `pac`
-- `proxy`
-- `proxyTunnel`
-- `proxyLocalhost`
-- `proxyUserpwd`
-- [region](https://docs.saucelabs.com/dev/cli/sauce-connect-proxy/index.html#--region)
-- `scproxyPort`
-- `sePort`
-- `sharedTunnel`
-- `statusAddress`
-- `tunnelDomains`
-- `tunnelIdentifier`
-- `tunnelName`
-- `tunnelPool`
-- `verbose`
 
 ## Sauce Connect Proxy log
 
