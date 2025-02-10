@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.0.0] - 2025-02-10
+
+### Added
+- support for Sauce Connect 5
+
+### Changed
+- breaking: the `region` input is now required
+- dependencies updated
+
+### Removed
+- support for Sauce Connect 4 has been dropped.
+- check out [Migration Guide](https://docs.saucelabs.com/secure-connections/sauce-connect-5/migrating/) for more
+
+
 ## [2.3.8] - 2025-01-29
 
 ### Changed
