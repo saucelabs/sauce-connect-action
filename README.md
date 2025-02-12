@@ -1,6 +1,6 @@
 # Sauce Connect Proxy GitHub Action
 
-A GitHub action to launch [Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/sauce-connect).
+A GitHub action to launch [Sauce Connect Proxy](https://docs.saucelabs.com/secure-connections/).
 
 ## Example
 

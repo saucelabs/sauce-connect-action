@@ -16,7 +16,7 @@ inputs:
         description: CA certificate bundle to use for verifying REST connections. (default "/usr/local/etc/openssl/cert.pem")
         required: false
     configFile:
-        description: Path to YAML config file. Please refer to https://docs.saucelabs.com/secure-connections/sauce-connect/setup-configuration/yaml-config/.
+        description: Path to YAML config file. Please refer to https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/configuration/.
         required: false
     directDomains:
         description: Comma-separated list of domains that you want to relay directly through the internet instead of through the Sauce Connect Proxy tunnel.
