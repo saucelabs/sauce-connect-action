@@ -93,6 +93,6 @@ inputs:
         required: false
         default: '5'
 runs:
-    using: 'node20'
+    using: 'node24'
     main: 'dist/main/index.js'
     post: 'dist/post/index.js'
