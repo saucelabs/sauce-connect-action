@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         name: Action Test
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: saucelabs/sauce-connect-action@v3
               with:
                   username: ${{ secrets.SAUCE_USERNAME }}
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Action Test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: saucelabs/sauce-connect-action@v3
         with:
           username: ${{ secrets.SAUCE_USERNAME }}
@@ -66,7 +66,7 @@ jobs:
           tunnelName: github-action-tunnel
           configFile: ${{ github.workspace }}/sc-configuration/config.yaml
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: sauce-connect-log
