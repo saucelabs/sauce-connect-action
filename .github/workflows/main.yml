@@ -6,9 +6,9 @@ jobs:
         runs-on: ubuntu-latest
         name: Action Test
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v5
               with:
                 node-version: 22
 
@@ -43,7 +43,7 @@ jobs:
                 SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
                 SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
-            - uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v6
               if: ${{ failure() }}
               with:
                 name: sauce-connect-log
